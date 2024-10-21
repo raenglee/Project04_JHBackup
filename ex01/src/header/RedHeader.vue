@@ -1,58 +1,41 @@
 <template>
-  <div>
-    <header>
-      <h1 class="text-5xl"></h1>
-      <div class="p-5 bg-[#d10000] text-white text-3xl">
-        <nav class="flex space-x-5">
-          <div>
-            <RouterLink to="/">DEVMIX</RouterLink>
-          </div>
-          <div>
-            <RouterLink to="/mypage">마이페이지</RouterLink>
-          </div>
-
-          <div class="group relative">
-            <RouterLink to="/projectlist">프로젝트</RouterLink>
-            <div
-              class="opacity-0 group-hover:opacity-100 transition absolute bg-[#7371fc] p-5 top-8 -left-5 rounded"
-            >
-              <div>
-                <RouterLink to="/freeboardlist">FreeBoardList</RouterLink>
-              </div>
-              <div>
-                <RouterLink to="/freeboardinput">FreeBoardinput</RouterLink>
-              </div>
-            </div>
-          </div>
-          <div>
-            <button
-              class="text-base px-2 py-1 bg-[#7371fc] text-white font-semibold hover:bg-opacity-80 focus:outline-none focus:ring-1 focus:ring-white"
-              @click.stop="modalLogin('login')"
-            >
-              로그인
-            </button>
-          </div>
-        </nav>
-
-        <div class="overlay" :class="{ isModal: isModal }"></div>
-        <div class="modal p-5 w-80 rounded-lg" :class="{ isView: isModal }">
-          <div>
-            <h1 class="text-black text-center p-5">로그인</h1>
-            <button class="text-black font-semibold hover:text-gray-500" @click="modalLogin">
-              X
-            </button>
-          </div>
-
-          <div class="ustify-center">
-            <div>
-              <button class="m-2"><img src="/img/sns_G.png" /></button>
-              <button class="m-2"><img src="/img/sns_n.png" /></button>
-              <button class="m-2"><img src="/img/sns_k.png" /></button>
-            </div>
-          </div>
+  <!--🔴헤더-->
+  <header>
+    <div class="p-3 bg-[#d10000]">
+      <nav class="flex space-x-5 justify-between items-center">
+        <div>
+          <RouterLink to="/" class="text-3xl text-white font-bold">DEVMIX</RouterLink>
         </div>
+
+        <div class="flex space-x-4">
+          <button><img src="/img/bell.png" class="h-6 w-6" /></button>
+          <RouterLink to="/projectlist"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
+          <button class="focus:outline-none" @click.stop="modalLogin('login')">
+            <img src="/img/person.png" class="h-6 w-5" />
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!--🙎‍♂️로그인 모달-->
+  <div class="overlay" :class="{ isModal: isModal }"></div>
+  <div class="modal p-5 w-96 rounded-lg" :class="{ isView: isModal }">
+
+    <div class="flex items-center justify-between">
+      <h1 class="text-lg text-black font-bold">로그인</h1>
+      <button class="h-4 w-4" @click="modalLogin"><img src="/img/x.png"></button>
+    </div>
+
+    <div class="m-5 justify-center">
+      <div>
+        <button class="m-1"><img src="/img/sns_G.png" /></button>
+        <button id="custom-login-btn" class="m-1" @click="kakaoLogin()" ><img src="/img/sns_k.png" /></button>
+        <button class="m-1"><img src="/img/sns_n.png" /></button>
       </div>
-    </header>
+    </div>
+
+    <p class="text-center text-xs text-gray-400">소셜 로그인 시 <br> 이용약관, 개인정보처리방침, 전자금융거래약관에 동의함으로 처리됩니다.</p>
   </div>
 </template>
 
@@ -65,6 +48,20 @@ const isModal = ref(false)
 const modalLogin = async () => {
   isModal.value = !isModal.value
 }
+
+
+const kakaoLogin = () => {
+  window.Kakao.Auth.authorize({
+  redirectUri: 'http://localhost:5173/oauth',
+  });
+};
+// const kakaoLogout = () => {
+//   window.Kakao.Auth.logout();
+//   // localStorage.removeItem('kakaoToken');
+//   // alert('로그아웃 되었습니다.');
+// };
+
+
 </script>
 
 <style scoped>
