@@ -28,27 +28,11 @@
 
     <div class="m-5 justify-center">
       <div>
-        <button class="m-1" @click="DoGoogleLogin"><img src="/img/sns_G.png" /></button>
-        <button id="custom-login-btn" class="m-1" @click="kakaoLogin()">
+        <router-link to="/oauth2/authorization/google"><img src="/img/sns_G.png" /></router-link>
+        <button id="custom-login-btn" class="m-1">
           <img src="/img/sns_k.png" />
         </button>
         <button class="m-1"><img src="/img/sns_n.png" /></button>
-
-        <p>
-          <a
-            href="http://localhost:5173/oauth2/authorization/naver?redirect_uri=http://localhost:5173/oauth2/redirect"
-            >네이버</a
-          >
-        </p>
-        <p>
-          <a
-            href="http://localhost:5173/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/oauth2/redirect"
-            >카카오</a
-          >
-        </p>
-        <p>
-          <a href="http://localhost:5173?redirect_uri=http://localhost:5173/test">구글</a>
-        </p>
       </div>
     </div>
 
@@ -67,29 +51,6 @@ const isModal = ref(false)
 
 const modalLogin = async () => {
   isModal.value = !isModal.value
-}
-
-const DoGoogleLogin = () => {
-  const url =
-    'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
-    '296298834351-i3rb8vhr7repa385aum4jdm5agris39s.apps.googleusercontent.com' +
-    '&redirect_uri=' +
-    'http://localhost:5173/test' +
-    '&response_type=code' +
-    '&scope=email profile'
-
-  this.showSocialLoginPopup(url)
-
-  window.Google.Auth.authorize({
-    redirectUri: 'http://localhost:5173/test'
-  })
-}
-
-const kakaoLogin = () => {
-  window.Kakao.Auth.authorize({
-    redirectUri: 'http://localhost:5173/oauth'
-    // scope: 'account_email,friends,talk_calendar,talk_calendar_task',
-  })
 }
 </script>
 
