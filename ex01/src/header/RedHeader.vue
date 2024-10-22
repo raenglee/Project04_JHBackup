@@ -21,21 +21,41 @@
   <!--🙎‍♂️로그인 모달-->
   <div class="overlay" :class="{ isModal: isModal }"></div>
   <div class="modal p-5 w-96 rounded-lg" :class="{ isView: isModal }">
-
     <div class="flex items-center justify-between">
       <h1 class="text-lg text-black font-bold">로그인</h1>
-      <button class="h-4 w-4" @click="modalLogin"><img src="/img/x.png"></button>
+      <button class="h-4 w-4" @click="modalLogin"><img src="/img/x.png" /></button>
     </div>
 
     <div class="m-5 justify-center">
       <div>
-        <button class="m-1"><img src="/img/sns_G.png" /></button>
-        <button id="custom-login-btn" class="m-1" @click="kakaoLogin()" ><img src="/img/sns_k.png" /></button>
+        <button class="m-1" @click="DoGoogleLogin"><img src="/img/sns_G.png" /></button>
+        <button id="custom-login-btn" class="m-1" @click="kakaoLogin()">
+          <img src="/img/sns_k.png" />
+        </button>
         <button class="m-1"><img src="/img/sns_n.png" /></button>
+
+        <p>
+          <a
+            href="http://localhost:5173/oauth2/authorization/naver?redirect_uri=http://localhost:5173/oauth2/redirect"
+            >네이버</a
+          >
+        </p>
+        <p>
+          <a
+            href="http://localhost:5173/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/oauth2/redirect"
+            >카카오</a
+          >
+        </p>
+        <p>
+          <a href="http://localhost:5173?redirect_uri=http://localhost:5173/test">구글</a>
+        </p>
       </div>
     </div>
 
-    <p class="text-center text-xs text-gray-400">소셜 로그인 시 <br> 이용약관, 개인정보처리방침, 전자금융거래약관에 동의함으로 처리됩니다.</p>
+    <p class="text-center text-xs text-gray-400">
+      소셜 로그인 시 <br />
+      이용약관, 개인정보처리방침, 전자금융거래약관에 동의함으로 처리됩니다.
+    </p>
   </div>
 </template>
 
@@ -49,19 +69,28 @@ const modalLogin = async () => {
   isModal.value = !isModal.value
 }
 
+const DoGoogleLogin = () => {
+  const url =
+    'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
+    '296298834351-i3rb8vhr7repa385aum4jdm5agris39s.apps.googleusercontent.com' +
+    '&redirect_uri=' +
+    'http://localhost:5173/test' +
+    '&response_type=code' +
+    '&scope=email profile'
+
+  this.showSocialLoginPopup(url)
+
+  window.Google.Auth.authorize({
+    redirectUri: 'http://localhost:5173/test'
+  })
+}
 
 const kakaoLogin = () => {
   window.Kakao.Auth.authorize({
-  redirectUri: 'http://localhost:5173/oauth',
-  });
-};
-// const kakaoLogout = () => {
-//   window.Kakao.Auth.logout();
-//   // localStorage.removeItem('kakaoToken');
-//   // alert('로그아웃 되었습니다.');
-// };
-
-
+    redirectUri: 'http://localhost:5173/oauth'
+    // scope: 'account_email,friends,talk_calendar,talk_calendar_task',
+  })
+}
 </script>
 
 <style scoped>

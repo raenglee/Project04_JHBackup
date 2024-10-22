@@ -1,14 +1,8 @@
 <template>
   <div class="bg-white">
-
-
     <!-- 메인 섹션 -->
     <section class="container mx-auto py-8">
-      <h1 class="text-2xl font-bold text-center mb-6">
-        현재 모집 중인 프로젝트를 확인해보세요!
-      </h1>
-
- 
+      <h1 class="text-2xl font-bold text-center mb-6">현재 모집 중인 프로젝트를 확인해보세요!</h1>
 
       <!-- 프로젝트 카드 그리드 -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -27,9 +21,9 @@
           <p class="text-sm text-gray-700 mb-4">현재 인원: 2/3</p>
           <!-- 기술 아이콘 -->
           <div class="flex space-x-2 mb-4">
-            <img src="https://via.placeholder.com/20" alt="기술1" class="w-6 h-6">
-            <img src="https://via.placeholder.com/20" alt="기술2" class="w-6 h-6">
-            <img src="https://via.placeholder.com/20" alt="기술3" class="w-6 h-6">
+            <img src="https://via.placeholder.com/20" alt="기술1" class="w-6 h-6" />
+            <img src="https://via.placeholder.com/20" alt="기술2" class="w-6 h-6" />
+            <img src="https://via.placeholder.com/20" alt="기술3" class="w-6 h-6" />
           </div>
         </div>
       </div>
@@ -54,6 +48,6 @@
 
 <script>
 export default {
-  name: 'ProjectList',
+  name: 'ProjectList'
 }
 </script>
