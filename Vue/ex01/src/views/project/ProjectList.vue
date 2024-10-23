@@ -15,7 +15,7 @@
           </select>
         </form>
 
-        <form action="#" class="px-5">
+        <form action="#" class="px-2">
           <select name="" size="1" class="px-4 py-1 my-5 border border-gray rounded-full cursor-pointer outline-none">
             <option selected>포지션</option>
             <option>프론트엔드</option>
@@ -30,7 +30,7 @@
           </select>
         </form>
 
-        <form action="#">
+        <form action="#" class="px-2">
           <select name="" size="1" class="px-4 py-1 my-5 border border-gray rounded-full cursor-pointer outline-none">
             <option selected>기술 / 언어</option>
             <option>JAVA</option>
