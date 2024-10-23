@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DevMix from '@/views/DevMix.vue' // @->src 밑
-import MyPage from '@/views/mypage/MyPage.vue'
 import ProjectList from '@/views/project/ProjectList.vue'
+import ProjectCreate from '@/views/project/ProjectCreate.vue'
+import MyPage from '@/views/mypage/MyPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'devmix',
-      component: DevMix
+      name: 'projectlist',
+      component: ProjectList
     },
     {
       path: '/mypage',
@@ -17,9 +17,14 @@ const router = createRouter({
       component: MyPage
     },
     {
-      path: '/projectlist',
-      name: 'projectlist',
-      component: ProjectList
+      path: '/projectcreate',
+      name: 'projectcreate',
+      component: ProjectCreate
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: MyPage
     }
   ]
 })
