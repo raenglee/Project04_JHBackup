@@ -27,29 +27,6 @@
             </button>
           </div>
         </template>
-
-        <!--알림, 글쓰기, 로그인-->
-        <!-- <template v-if="loginPinia.loginCheck">
-          <div class="flex space-x-5">
-            <h1>안녕하세요 {{ loginPinia.name }} 님</h1>
-            <button @click="logout">로그아웃</button>
-          </div>
-        </template>
-        <template v-else>
-          <div class="flex space-x-5">
-            <button class="focus:outline-none" @click.stop="modalLogin('login')">
-              <img src="/img/person.png" class="h-6 w-5" />
-            </button>
-          </div>
-        </template>
-
-        <div class="flex space-x-4">
-          <button><img src="/img/bell.png" class="h-6 w-6" /></button>
-          <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
-          <router-link to="/mypage" class="focus:outline-none">
-            <img src="/img/person.png" class="h-6 w-5" />
-          </router-link>
-        </div> -->
       </nav>
     </div>
   </header>
@@ -63,7 +40,7 @@
     </div>
 
     <div class="m-5 justify-center">
-      <div>
+      <div class="flex flex-col gap-3">
         <a href="http://localhost:8080/oauth2/authorization/google"><img src="/img/sns_G.png" /></a>
         <a href="http://localhost:8080/oauth2/authorization/kakao"><img src="/img/sns_k.png" /></a>
         <a href="http://localhost:8080/oauth2/authorization/naver"><img src="/img/sns_n.png" /></a>
