@@ -44,8 +44,30 @@
             </select>
           </form>
 
-          <button class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none" @click="clickBookmark">북마크만 보기</button>
-          <button class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none">모집중만 보기</button>
+          <button 
+  class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
+  :class="{
+    'bg-[#d10000] text-white': onlyBookmarked,
+    'bg-white text-black': !onlyBookmarked
+  }" 
+  @click="clickBookmarkonly"
+>
+  북마크만 보기
+</button>
+
+<button 
+  class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
+  :class="{
+    'bg-[#d10000] text-white': onlyNeeded,
+    'bg-white text-black': !onlyNeeded
+  }" 
+  @click="clickneededonly"
+>
+  모집중만 보기
+</button>
+
+
+          <!-- <button class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none" @click="clickneededonly">모집중만 보기</button>-->
         </div>
 
         <div class="flex items-center border border-gray-300 rounded-full px-4 py-1">
@@ -53,12 +75,13 @@
           <button><img src="/img/search.png" class="h-5 w-5" /></button>
         </div>
       </div>
+      
       <!--서치 박스 끝-->
 
       <!--📝프로젝트 글 박스-->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         <div v-for="i in 8" :key="i" class="relative">
-          <div class="border rounded-2xl p-4 relative">
+          <div class="border-2 rounded-2xl p-4 relative">
             <div class="top-4 flex items-center justify-between">
               <div class="border px-2 rounded-full mb-2 bg-gray-300">지역</div>
               <font-awesome-icon
@@ -138,37 +161,36 @@
 
 <!--스크립트-->
 <script>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 export default {
-  name: 'BookmarkButton',
   setup() {
+    const onlyBookmarked = ref(false);
+    const onlyNeeded = ref(false);
     const isBookmarked = ref(false);
 
-    const clickBookmark = () => {
-      isBookmarked.value = !isBookmarked.value;
+    const clickBookmarkonly = () => {
+      onlyBookmarked.value = !onlyBookmarked.value;
       console.log('북마크만보기');
     };
 
-    const buttonClass = computed(() => {
-      return isBookmarked.value ? 'bg-[#d10000] text-white border-[#d10000]' : 'border-[#d10000] text-[#d10000]';
-    });
-
-    return {
-      clickBookmark,
-      buttonClass
-    };
-  },
-
-  data() {
-    return {
-      isBookmarked: false // 북마크 상태 관리
-    };
-  },
-  methods: {
-    toggleBookmark() {
-      this.isBookmarked = !this.isBookmarked; // 클릭 시 북마크 상태 토글
+    const clickneededonly = () => {
+      onlyNeeded.value = !onlyNeeded.value;
+      console.log('모집중만 보기');
     }
-  }
+
+    const toggleBookmark = () => {
+      isBookmarked.value = !isBookmarked.value; //
+    };
+    
+    return {
+      isBookmarked,
+      onlyBookmarked,
+      onlyNeeded,
+      clickBookmarkonly,
+      clickneededonly,
+      toggleBookmark
+    };
+  },
 };
 </script>
