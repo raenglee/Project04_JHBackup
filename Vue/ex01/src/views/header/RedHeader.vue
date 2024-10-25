@@ -8,7 +8,7 @@
         </div>
 
         <!--로그인 한 후 아이콘-->
-        <template v-if="loginCheck">
+        <template v-if="userStore.loginCheck">
           <div class="flex space-x-4">
             <button><img src="/img/bell.png" class="h-6 w-6" /></button>
             <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
@@ -56,40 +56,31 @@
 
 <!--스크립트-->
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watchEffect } from 'vue';
+import { useUserStore } from '@/store/user';
 import { RouterLink, useRoute } from 'vue-router';
-import { watchEffect } from 'vue';
 
-const route = useRoute();
 const isModal = ref(false);
-const loginCheck = ref(false);
+const route = useRoute(); // 현재 라우트 정보를 가져옵니다.
 
 const modalLogin = async () => {
   isModal.value = !isModal.value;
 };
 
-onMounted(() => {
-  // 새로고침 시에도 localStorage에서 토큰을 확인하고 로그인 상태 유지
-  const token = localStorage.getItem('token');
-  if (token) {
-    loginCheck.value = true;
-  } else {
-    loginCheck.value = false;
-  }
-});
+const userStore = useUserStore();
 
-watchEffect(async () => {
+// 페이지가 로드될 때 토큰을 확인하고 로그인 상태 설정
+watchEffect(() => {
   if (route.query.token) {
-    loginCheck.value = true;
-    localStorage.setItem('token', route.query.token);
+    localStorage.setItem('token', route.query.token); // 토큰을 localStorage에 저장
+    userStore.login(); // 로그인 상태로 변경
   }
 });
 
 const logout = () => {
   localStorage.removeItem('token');
-  loginCheck.value = false;
-  alert('로그아웃 하였습니다.');
-  window.location.reload();
+  userStore.logout(); // Pinia의 logout 메서드 호출
+  alert('로그아웃 성공');
 };
 </script>
 
