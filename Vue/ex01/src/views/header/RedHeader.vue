@@ -56,7 +56,7 @@
 
 <!--스크립트-->
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { watchEffect } from 'vue';
 
@@ -68,17 +68,28 @@ const modalLogin = async () => {
   isModal.value = !isModal.value;
 };
 
+onMounted(() => {
+  // 새로고침 시에도 localStorage에서 토큰을 확인하고 로그인 상태 유지
+  const token = localStorage.getItem('token');
+  if (token) {
+    loginCheck.value = true;
+  } else {
+    loginCheck.value = false;
+  }
+});
+
 watchEffect(async () => {
   if (route.query.token) {
-    console.log(route.query.token);
     loginCheck.value = true;
     localStorage.setItem('token', route.query.token);
   }
 });
 
 const logout = () => {
-  localStorage.removeItem('token', route.query.token);
+  localStorage.removeItem('token');
+  loginCheck.value = false;
   alert('로그아웃 하였습니다.');
+  window.location.reload();
 };
 </script>
 
