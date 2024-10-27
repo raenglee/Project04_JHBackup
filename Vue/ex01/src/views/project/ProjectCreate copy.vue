@@ -94,10 +94,13 @@
           </div>
         </div>
 
-        <!-- 프로젝트 소개 (Quill 에디터) -->
+        <!-- 프로젝트 소개 -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">프로젝트 소개</label>
-          <vue3-quill v-model="projectDescription" theme="snow" />
+          <textarea
+            class="w-full p-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+            rows="5"
+          ></textarea>
         </div>
 
         <!-- 파일 첨부 -->
@@ -126,15 +129,9 @@
 </template>
 
 <script>
-import { QuillEditor } from "vue3-quill";
-
 export default {
-  components: {
-    'vue3-quill': QuillEditor,
-  },
   data() {
     return {
-      projectDescription: '', // 프로젝트 소개 입력 데이터
       selectedSkill: "",
       selectedSkills: [],
       techOptions: ["JAVA", "Python", "JavaScript", "Spring", "React", "Node.js", "Vue", "Angular", "Django", "Kotlin"],

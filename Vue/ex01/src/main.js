@@ -6,8 +6,10 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
+
 import FontAwesomeIcon from './assets/FontAwesome.js'; //폰트 어썸 전역 등록
 import SvgIcon from '@/assets/SvgIcon.vue'; //SvgIcon 전역 등록
+import "quill/dist/quill.snow.css"; // Quill 에디터 스타일 추가
 
 const app = createApp(App);
 const pinia = createPinia();
