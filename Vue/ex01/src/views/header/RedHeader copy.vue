@@ -8,15 +8,14 @@
         </div>
 
         <!--로그인 한 후 아이콘-->
-          <div class="flex space-x-4">
-            <button><img src="/img/bell.png" class="h-6 w-6" /></button>
-            <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
-            <router-link to="/mypage" class="focus:outline-none">
-              <img src="/img/person.png" class="h-6 w-5" />
-            </router-link>
-            <button @click="logout" class="text-white">로그아웃</button>
-          </div>
-
+        <div class="flex space-x-4">
+          <button><img src="/img/bell.png" class="h-6 w-6" /></button>
+          <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
+          <router-link to="/mypage" class="focus:outline-none">
+            <img src="/img/person.png" class="h-6 w-5" />
+          </router-link>
+          <button @click="logout" class="text-white">로그아웃</button>
+        </div>
       </nav>
     </div>
   </header>
@@ -54,7 +53,6 @@ const isModal = ref(false);
 const modalLogin = async () => {
   isModal.value = !isModal.value;
 };
-
 </script>
 
 <!--스타일-->

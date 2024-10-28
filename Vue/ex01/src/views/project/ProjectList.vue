@@ -44,28 +44,27 @@
             </select>
           </form>
 
-          <button 
-  class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
-  :class="{
-    'bg-[#d10000] text-white': onlyBookmarked,
-    'bg-white text-black': !onlyBookmarked
-  }" 
-  @click="clickBookmarkonly"
->
-  북마크만 보기
-</button>
+          <button
+            class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
+            :class="{
+              'bg-[#d10000] text-white': onlyBookmarked,
+              'bg-white text-black': !onlyBookmarked
+            }"
+            @click="clickBookmarkonly"
+          >
+            북마크만 보기
+          </button>
 
-<button 
-  class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
-  :class="{
-    'bg-[#d10000] text-white': onlyNeeded,
-    'bg-white text-black': !onlyNeeded
-  }" 
-  @click="clickneededonly"
->
-  모집중만 보기
-</button>
-
+          <button
+            class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
+            :class="{
+              'bg-[#d10000] text-white': onlyNeeded,
+              'bg-white text-black': !onlyNeeded
+            }"
+            @click="clickneededonly"
+          >
+            모집중만 보기
+          </button>
 
           <!-- <button class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none" @click="clickneededonly">모집중만 보기</button>-->
         </div>
@@ -75,7 +74,7 @@
           <button><img src="/img/search.png" class="h-5 w-5" /></button>
         </div>
       </div>
-      
+
       <!--서치 박스 끝-->
 
       <!--📝프로젝트 글 박스-->
@@ -160,37 +159,25 @@
 </template>
 
 <!--스크립트-->
-<script>
+<script setup>
 import { ref } from 'vue';
 
-export default {
-  setup() {
-    const onlyBookmarked = ref(false);
-    const onlyNeeded = ref(false);
-    const isBookmarked = ref(false);
+const searchText = ref('');
+const onlyBookmarked = ref(false);
+const onlyNeeded = ref(false);
+const isBookmarked = ref(false);
 
-    const clickBookmarkonly = () => {
-      onlyBookmarked.value = !onlyBookmarked.value;
-      console.log('북마크만보기');
-    };
+const clickBookmarkonly = () => {
+  onlyBookmarked.value = !onlyBookmarked.value;
+  console.log('북마크만 보기');
+};
 
-    const clickneededonly = () => {
-      onlyNeeded.value = !onlyNeeded.value;
-      console.log('모집중만 보기');
-    }
+const clickneededonly = () => {
+  onlyNeeded.value = !onlyNeeded.value;
+  console.log('모집중만 보기');
+};
 
-    const toggleBookmark = () => {
-      isBookmarked.value = !isBookmarked.value; //
-    };
-    
-    return {
-      isBookmarked,
-      onlyBookmarked,
-      onlyNeeded,
-      clickBookmarkonly,
-      clickneededonly,
-      toggleBookmark
-    };
-  },
+const toggleBookmark = () => {
+  isBookmarked.value = !isBookmarked.value; //
 };
 </script>

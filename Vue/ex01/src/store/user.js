@@ -3,16 +3,21 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
   state: () => ({
     loginCheck: false,
-    email: ''
+    username: '',
+    nickname: ''
   }),
+  getters: {},
   actions: {
-    login() {
-      //login 성공 -> backend 통신
+    login(data) {
       this.loginCheck = true;
+      this.nickname = data.nickname;
+      this.username = data.username;
     },
     logout() {
       this.loginCheck = false;
-      this.email = '';
+      this.nickname = '';
+      this.username = '';
     }
-  }
+  },
+  persist: true
 });
