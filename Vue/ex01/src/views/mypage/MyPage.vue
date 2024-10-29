@@ -12,6 +12,8 @@
 import { useUserStore } from '@/store/user';
 
 const useStore = useUserStore;
+
+console.log('username in localStorage:', localStorage.getItem('username'));
 </script>
 
 <style lang="scss" scoped></style>

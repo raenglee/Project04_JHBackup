@@ -6,17 +6,23 @@ export const useUserStore = defineStore('user', {
     username: '',
     nickname: ''
   }),
-  getters: {},
   actions: {
     login(data) {
       this.loginCheck = true;
       this.nickname = data.nickname;
       this.username = data.username;
+
+      localStorage.setItem('nickname', data.nickname);
+      localStorage.setItem('username', data.username);
     },
+
     logout() {
       this.loginCheck = false;
       this.nickname = '';
       this.username = '';
+
+      localStorage.removeItem('nickname');
+      localStorage.removeItem('username');
     }
   },
   persist: true

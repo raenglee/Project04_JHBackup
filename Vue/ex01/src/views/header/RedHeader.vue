@@ -79,8 +79,14 @@ const useStore = useUserStore();
 watchEffect(async () => {
   if (route.query.token) {
     localStorage.setItem('token', route.query.token);
-    const data = loginUsers();
+    const data = await loginUsers();
+    console.log(data);
     useStore.login(data);
+    // if (data?.nickname && data?.username) {
+    //   useStore.login(data);
+    // } else {
+    //   console.error('Nickname or username not found in response data');
+    // }
     // router.push('/api/v1/auth/social');
     router.push('signup');
   }

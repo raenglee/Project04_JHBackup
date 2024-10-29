@@ -20,7 +20,8 @@ export const loginUsers = async () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    return res;
+    console.log(res.data);
+    return res.data;
   } catch (err) {
     console.error(err);
     return err;
