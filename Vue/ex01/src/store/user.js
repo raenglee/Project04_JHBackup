@@ -4,25 +4,29 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     loginCheck: false,
     username: '',
-    nickname: ''
+    nickname: '',
+    email: ''
   }),
   actions: {
     login(data) {
       this.loginCheck = true;
-      this.nickname = data.nickname;
-      this.username = data.username;
+      this.nickname = data.result.nickname;
+      this.username = data.result.username;
+      this.email = data.result.email;
 
-      localStorage.setItem('nickname', data.nickname);
-      localStorage.setItem('username', data.username);
+      // localStorage.setItem('nickname', data.result.nickname);
+      // localStorage.setItem('username', data.result.username);
     },
 
     logout() {
       this.loginCheck = false;
       this.nickname = '';
       this.username = '';
+      this.email = '';
 
-      localStorage.removeItem('nickname');
-      localStorage.removeItem('username');
+      // localStorage.removeItem('nickname');
+      // localStorage.removeItem('username');
+      // localStorage.removeItem('email');
     }
   },
   persist: true

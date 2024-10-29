@@ -12,11 +12,11 @@
           <div class="flex space-x-4">
             <button><img src="/img/bell.png" class="h-6 w-6" /></button>
             <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
-            <router-link to="/mypage" class="focus:outline-none">
+            <RouterLink to="/mypage/myposts" class="focus:outline-none">
               <img src="/img/person.png" class="h-6 w-5" />
-            </router-link>
+            </RouterLink>
             <button @click="logout" class="text-white">로그아웃</button>
-            <p class="text-white">{{ useStore.username }} 님</p>
+            <p class="text-white">{{ useStore.nickname }} 님</p>
           </div>
         </template>
 
@@ -80,7 +80,6 @@ watchEffect(async () => {
   if (route.query.token) {
     localStorage.setItem('token', route.query.token);
     const data = await loginUsers();
-    console.log(data);
     useStore.login(data);
     // if (data?.nickname && data?.username) {
     //   useStore.login(data);
