@@ -1,10 +1,10 @@
-// src/plugins/FontAwesome.js
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons'; // 채워진 북마크
-import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons'; // 빈 북마크
-import { faEye, faComment } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as solidBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as regularBookmark } from '@fortawesome/free-regular-svg-icons';
+import { faEye, faComment, faChevronUp, faChevronDown, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'; // faPlus와 faMinus 추가
 
-library.add(solidBookmark, regularBookmark, faEye, faComment);
+// 라이브러리에 아이콘 추가
+library.add(solidBookmark, regularBookmark, faEye, faComment, faChevronUp, faChevronDown, faPlus, faMinus);
 
-export default FontAwesomeIcon;
+export { FontAwesomeIcon };

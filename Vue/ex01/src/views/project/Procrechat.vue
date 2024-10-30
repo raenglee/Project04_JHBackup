@@ -8,11 +8,7 @@
         <!-- 프로젝트 명 -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">프로젝트 명</label>
-          <input
-            type="text"
-            placeholder="프로젝트 명을 입력하세요."
-            class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          <input type="text" placeholder="프로젝트 명을 입력하세요." class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary" />
         </div>
 
         <!-- 지역, 진행 기간, 모집 마감일 -->
@@ -35,10 +31,7 @@
 
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">모집 마감일</label>
-            <input
-              type="date"
-              class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+            <input type="date" class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary" />
           </div>
         </div>
 
@@ -51,11 +44,7 @@
               <option v-for="tech in techOptions" :key="tech">{{ tech }}</option>
             </select>
             <div class="flex flex-wrap">
-              <div
-                v-for="(skill, index) in selectedSkills"
-                :key="index"
-                class="bg-gray-100 p-2 rounded-full m-1 flex items-center space-x-2"
-              >
+              <div v-for="(skill, index) in selectedSkills" :key="index" class="bg-gray-100 p-2 rounded-full m-1 flex items-center space-x-2">
                 <span>{{ skill }}</span>
                 <button @click="removeSkill(index)" class="text-red-500">삭제</button>
               </div>
@@ -71,7 +60,7 @@
               <option disabled value="">분야를 선택하세요</option>
               <option v-for="role in roleOptions" :key="role">{{ role }}</option>
             </select>
-            
+
             <!-- 사람 수 조절 버튼 -->
             <div class="flex items-center space-x-1">
               <button type="button" @click="decreaseCount(index)" class="text-gray-500 px-2 rounded-full border border-gray-300">-</button>
@@ -83,24 +72,14 @@
             <button type="button" @click="removePosition(index)" class="text-red-500 font-bold rounded-full">삭제</button>
 
             <!-- 마지막 칸에만 추가 버튼 표시 -->
-            <button
-              v-if="index === positions.length - 1"
-              type="button"
-              @click="addPosition"
-              class="text-blue-500 font-bold rounded-full"
-            >
-              추가
-            </button>
+            <button v-if="index === positions.length - 1" type="button" @click="addPosition" class="text-blue-500 font-bold rounded-full">추가</button>
           </div>
         </div>
 
         <!-- 프로젝트 소개 -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">프로젝트 소개</label>
-          <textarea
-            class="w-full p-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-            rows="5"
-          ></textarea>
+          <textarea class="w-full p-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary" rows="5"></textarea>
         </div>
 
         <!-- 파일 첨부 -->
@@ -110,18 +89,8 @@
 
         <!-- 등록 버튼 -->
         <div class="flex justify-end space-x-4 pt-4 border-t mt-6">
-          <button
-            type="button"
-            class="px-6 py-2 border border-gray-400 text-gray-700 rounded-full hover:bg-gray-100"
-          >
-            취소
-          </button>
-          <button
-            type="submit"
-            class="px-6 py-2 bg-primary text-white rounded-full hover:bg-red-700"
-          >
-            등록
-          </button>
+          <button type="button" class="px-6 py-2 border border-gray-400 text-gray-700 rounded-full hover:bg-gray-100">취소</button>
+          <button type="submit" class="px-6 py-2 bg-primary text-white rounded-full hover:bg-red-700">등록</button>
         </div>
       </form>
     </div>
@@ -132,35 +101,25 @@
 export default {
   data() {
     return {
-      selectedSkill: "",
+      selectedSkill: '',
       selectedSkills: [],
-      techOptions: ["JAVA", "Python", "JavaScript", "Spring", "React", "Node.js", "Vue", "Angular", "Django", "Kotlin"],
-      positions: [{ role: "", count: 1 }], // 기본으로 한 칸이 미리 존재
-      roleOptions: [
-        "프론트엔드",
-        "백엔드",
-        "디자이너",
-        "PM",
-        "기획자",
-        "데브옵스",
-        "안드로이드 개발자",
-        "IOS 개발자",
-        "크로스 플랫폼 개발자",
-      ],
+      techOptions: ['JAVA', 'Python', 'JavaScript', 'Spring', 'React', 'Node.js', 'Vue', 'Angular', 'Django', 'Kotlin'],
+      positions: [{ role: '', count: 1 }], // 기본으로 한 칸이 미리 존재
+      roleOptions: ['프론트엔드', '백엔드', '디자이너', 'PM', '기획자', '데브옵스', '안드로이드 개발자', 'IOS 개발자', '크로스 플랫폼 개발자']
     };
   },
   methods: {
     addSkill() {
       if (this.selectedSkill && !this.selectedSkills.includes(this.selectedSkill)) {
         this.selectedSkills.push(this.selectedSkill);
-        this.selectedSkill = "";
+        this.selectedSkill = '';
       }
     },
     removeSkill(index) {
       this.selectedSkills.splice(index, 1);
     },
     addPosition() {
-      this.positions.push({ role: "", count: 1 });
+      this.positions.push({ role: '', count: 1 });
     },
     removePosition(index) {
       this.positions.splice(index, 1);
@@ -172,8 +131,8 @@ export default {
       if (this.positions[index].count > 1) {
         this.positions[index].count -= 1;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
