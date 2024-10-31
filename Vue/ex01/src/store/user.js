@@ -13,9 +13,6 @@ export const useUserStore = defineStore('user', {
       this.nickname = data.result.nickname;
       this.username = data.result.username;
       this.email = data.result.email;
-
-      // localStorage.setItem('nickname', data.result.nickname);
-      // localStorage.setItem('username', data.result.username);
     },
 
     logout() {
@@ -23,10 +20,6 @@ export const useUserStore = defineStore('user', {
       this.nickname = '';
       this.username = '';
       this.email = '';
-
-      // localStorage.removeItem('nickname');
-      // localStorage.removeItem('username');
-      // localStorage.removeItem('email');
     }
   },
   persist: true

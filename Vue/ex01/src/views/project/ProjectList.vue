@@ -74,13 +74,12 @@
           <button><img src="/img/search.png" class="h-5 w-5" /></button>
         </div>
       </div>
-
       <!--서치 박스 끝-->
 
       <!--📝프로젝트 글 박스-->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-        <div v-for="i in 8" :key="i" class="relative">
-          <div class="border-2 rounded-2xl p-4 relative">
+      <template v-if="arr && arr.length > 0">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+          <div v-for="item in arr" :key="item.id" class="border-2 rounded-2xl p-4 relative">
             <div class="top-4 flex items-center justify-between">
               <div class="border px-2 rounded-full mb-2 bg-gray-300">지역</div>
               <font-awesome-icon
@@ -90,8 +89,8 @@
                 @click="toggleBookmark"
               />
             </div>
-            <div class="text-sm mb-2">마감일 | yyyy.mm.dd</div>
-            <div class="text-2xl font-bold mb-2">제목</div>
+            <div class="text-sm mb-2">마감일 | {{ item.endDate }}</div>
+            <div class="text-2xl font-bold mb-2">{{ item.title }}</div>
             <div class="flex p-3 gap-7 mb-1">
               <span class="flex flex-col size-5 items-center text-sm"
                 ><img src="/img/figma.png" />
@@ -105,48 +104,20 @@
               </span>
             </div>
             <div class="flex flex-col">
-              <div class="ml-auto mb-1">닉네임</div>
+              <div class="ml-auto mb-1">{{ item.userNickname }}</div>
               <div class="flex justify-between">
                 <div class="text-sm">인원 n/n</div>
-                <div><font-awesome-icon icon="eye" class="text-gray-400" /> 20 <font-awesome-icon icon="comment" class="text-gray-400" /> 30</div>
+                <div><font-awesome-icon icon="eye" class="text-gray-400" /> {{ item.viewCount }} <font-awesome-icon icon="comment" class="text-gray-400" /> 30</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
       <!--프로젝트 글 박스 끝-->
 
       <div class="text-center mt-10 mb-10">
         <span class="font-semibold text-3xl"> 현재 DEVMIX에서 모집 중인 프로젝트 <span class="text-[#D10000]">N</span>건</span>
       </div>
-
-      <!--📝프로젝트 글 박스2-->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-        <div v-for="i in 8" :key="i" class="relative">
-          <div class="border rounded-2xl p-4 relative">
-            <div class="top-4 flex items-center justify-between">
-              <div class="border px-2 rounded-full mb-2 bg-gray-300">지역</div>
-              <font-awesome-icon
-                :icon="isBookmarked ? ['fas', 'bookmark'] : ['far', 'bookmark']"
-                :class="[isBookmarked ? 'text-[#7371fc]' : 'text-gray-400', 'cursor-pointer']"
-                style="font-size: 22px"
-                @click="toggleBookmark"
-              />
-            </div>
-            <div class="text-sm mb-2">마감일 | yyyy.mm.dd</div>
-            <div class="text-2xl font-bold mb-2">제목</div>
-            <div class="flex gap-5 mb-1">기술스택</div>
-            <div class="flex flex-col">
-              <div class="ml-auto mb-1">닉네임</div>
-              <div class="flex justify-between">
-                <div class="text-sm">인원 n/n</div>
-                <div><font-awesome-icon icon="eye" class="text-gray-400" /> 20 <font-awesome-icon icon="comment" class="text-gray-400" /> 30</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--프로젝트 글 박스 끝-->
 
       <!--페이지-->
       <div class="flex justify-center mt-8 space-x-2">
@@ -160,12 +131,14 @@
 
 <!--스크립트-->
 <script setup>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 const searchText = ref('');
 const onlyBookmarked = ref(false);
 const onlyNeeded = ref(false);
 const isBookmarked = ref(false);
+
+const arr = ref([]);
 
 const clickBookmarkonly = () => {
   onlyBookmarked.value = !onlyBookmarked.value;
@@ -180,4 +153,11 @@ const clickneededonly = () => {
 const toggleBookmark = () => {
   isBookmarked.value = !isBookmarked.value; //
 };
+
+//프로젝트 가져오기 -> 백 미완성
+// watchEffect(async () => {
+//   const res = await listProject();
+//   console.log(res.data.list);
+//   arr.value = res.data.list;
+// });
 </script>
