@@ -8,7 +8,7 @@
       <div class="flex items-center justify-between">
         <div class="flex gap-4">
           <form action="#">
-            <select name="" size="1" class="px-4 py-1 my-5 border-2 border-gray rounded-full cursor-pointer outline-none">
+            <select name="" size="1" class="px-4 py-1 my-5 border border-gray rounded-full cursor-pointer outline-none">
               <option selected>구별</option>
               <option>온라인</option>
               <option>서울</option>
@@ -18,7 +18,7 @@
           </form>
 
           <form action="#">
-            <select name="" size="1" class="px-4 py-1 my-5 border-2 border-gray rounded-full cursor-pointer outline-none">
+            <select name="" size="1" class="px-4 py-1 my-5 border border-gray rounded-full cursor-pointer outline-none">
               <option selected>포지션</option>
               <option>프론트엔드</option>
               <option>백엔드</option>
@@ -33,7 +33,7 @@
           </form>
 
           <form action="#">
-            <select name="" size="1" class="px-4 py-1 my-5 border-2 border-gray rounded-full cursor-pointer outline-none">
+            <select name="" size="1" class="px-4 py-1 my-5 border border-gray rounded-full cursor-pointer outline-none">
               <option selected>기술 / 언어</option>
               <option>JAVA</option>
               <option>JavaScript</option>
@@ -45,7 +45,7 @@
           </form>
 
           <button
-            class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
+            class="px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none"
             :class="{
               'bg-[#d10000] text-white': onlyBookmarked,
               'bg-white text-black': !onlyBookmarked
@@ -56,7 +56,7 @@
           </button>
 
           <button
-            class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none"
+            class="px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none"
             :class="{
               'bg-[#d10000] text-white': onlyNeeded,
               'bg-white text-black': !onlyNeeded
@@ -66,7 +66,7 @@
             모집중만 보기
           </button>
 
-          <!-- <button class="px-4 py-1 my-5 border-2 border-[#d10000] rounded-full outline-none" @click="clickneededonly">모집중만 보기</button>-->
+          <!-- <button class="px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none" @click="clickneededonly">모집중만 보기</button>-->
         </div>
 
         <div class="flex items-center border border-gray-300 rounded-full px-4 py-1">
@@ -79,7 +79,7 @@
       <!--📝프로젝트 글 박스-->
       <template v-if="arr && arr.length > 0">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-          <div v-for="item in arr" :key="item.id" class="border-2 rounded-2xl p-4 relative">
+          <div v-for="item in arr" :key="item.id" class="border rounded-2xl p-4 relative">
             <div class="top-4 flex items-center justify-between">
               <div class="border px-2 rounded-full mb-2 bg-gray-300">지역</div>
               <font-awesome-icon

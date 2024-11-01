@@ -14,7 +14,7 @@
       <div class="flex justify-between space-x-10 mt-5">
         <div class="flex flex-col">
           <h1 class="font-bold text-lg pb-2">지역 / 구분</h1>
-          <select class="w-52 p-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary">
+          <select class="w-52 h-11 p-2 border border-gray-200 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary">
             <option>온라인</option>
             <option>서울</option>
             <option>부산</option>
@@ -134,7 +134,7 @@
       <div class="p-5 bg-gray-100 rounded-md">
         <!--@dragover.prevent="" @drop.prevent="dropFile"-->
         <h1 class="text-center">파일을 첨부하세요</h1>
-        <div v-for="file in myfile" v-bind:key="file">file = {{ file.name }}</div>
+        <div v-for="file in myfile" v-bind:key="file">{{ file.name }}</div>
         <div></div>
       </div>
 

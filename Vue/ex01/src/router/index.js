@@ -7,6 +7,7 @@ import MyPost from '@/views/mypage/MyPost.vue';
 import MyComment from '@/views/mypage/MyComment.vue';
 import MyProject from '@/views/mypage/MyProject.vue';
 import MyLikePost from '@/views/mypage/MyLikePost.vue';
+import ProjectView from '@/views/project/ProjectView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
       path: '/projectcreate',
       name: 'projectcreate',
       component: ProjectCreate
+    },
+    {
+      path: '/projectview/:board_id',
+      name: 'projectview',
+      component: ProjectView
     },
     {
       path: '/signup',

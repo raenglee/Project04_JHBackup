@@ -10,6 +10,7 @@
         <!--로그인 한 후 아이콘-->
         <template v-if="useStore.loginCheck">
           <div class="flex space-x-4">
+            <RouterLink to="/projectview/:board_id">게시글상세 테스트용</RouterLink>
             <button><img src="/img/bell.png" class="h-6 w-6" /></button>
             <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
             <RouterLink to="/mypage/myposts" class="focus:outline-none">
