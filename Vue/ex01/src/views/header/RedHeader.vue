@@ -7,7 +7,7 @@
           <RouterLink to="/" class="text-3xl text-white font-bold">DEVMIX</RouterLink>
         </div>
 
-        <!--로그인 한 후 아이콘-->
+        <!--🌐로그인 한 후 아이콘-->
         <template v-if="useStore.loginCheck">
           <div class="flex space-x-4">
             <RouterLink to="/projectview/:board_id">게시글상세 테스트용</RouterLink>
@@ -21,7 +21,7 @@
           </div>
         </template>
 
-        <!--로그인 하기 전 아이콘-->
+        <!--⛔로그인 하기 전 아이콘-->
         <template v-else>
           <div class="flex space-x-5">
             <button class="focus:outline-none" @click.stop="modalLogin('login')">

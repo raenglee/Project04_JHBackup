@@ -12,6 +12,8 @@
 
       <!--🔜지역/구분, 진행 기간, 모집 마감일-->
       <div class="flex justify-between space-x-10 mt-5">
+
+        <!--지역 / 구분 드롭다운-->
         <div class="flex flex-col">
           <h1 class="font-bold text-lg pb-2">지역 / 구분</h1>
           <select class="w-52 h-11 p-2 border border-gray-200 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary">
@@ -26,6 +28,8 @@
             <option>기타</option>
           </select>
         </div>
+
+        <!--진행 기간 드롭다운-->
         <div class="flex flex-col">
           <h1 class="font-bold text-lg pb-2">진행 기간</h1>
           <select class="w-52 p-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary">
@@ -39,6 +43,8 @@
             <option>6개월 이상</option>
           </select>
         </div>
+
+        <!--모집 마감일-->
         <div class="flex flex-col">
           <h1 class="font-bold text-lg pb-2">모집 마감일</h1>
           <input type="date" class="w-52 p-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary" />
@@ -131,17 +137,17 @@
       </div>
 
       <!--파일 첨부-->
-      <div class="p-5 bg-gray-100 rounded-md">
+      <div class="p-10 bg-gray-100 rounded-md">
         <!--@dragover.prevent="" @drop.prevent="dropFile"-->
-        <h1 class="text-center">파일을 첨부하세요</h1>
+        <h1 class="text-center text-gray-500">파일을 첨부하세요</h1>
         <div v-for="file in myfile" v-bind:key="file">{{ file.name }}</div>
         <div></div>
       </div>
 
       <!-- 취소, 등록 버튼 -->
       <div class="flex justify-center space-x-4 pt-4 mt-5 mb-5">
-        <button type="button" class="text-lg px-3 py-1 border border-gray-200 rounded-full hover:bg-gray-300 hover:text-black hover:border-gray-300">취소</button>
-        <button type="submit" class="text-lg px-3 py-1 border border-gray-200 rounded-full hover:bg-[#d10000] hover:text-white hover:border-[#d10000]" @click="save">등록</button>
+        <button type="button" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-gray-300 hover:text-black hover:border-gray-300">취소</button>
+        <button type="submit" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-[#d10000] hover:text-white hover:border-[#d10000]" @click="save">등록</button>
       </div>
     </div>
     <!--프로젝트 생성 선택 구간 끝-->
