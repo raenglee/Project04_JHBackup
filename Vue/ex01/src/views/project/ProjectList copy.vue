@@ -158,17 +158,16 @@ const onlyNeeded = ref(false);
 const arr = ref([]); // 게시물 배열
 
 // 프로젝트 가져오기
-const fetchProjects = async () => {
+const getProjects = async () => {
   try {
     const res = await listProject();
-    arr.value = res.map((item) => ({ ...item, isBookmarked: false })); // 각 게시물에 북마크 상태 추가
+    arr.value = res.map((item) => ({ ...item, isBookmarked: false }));
   } catch (error) {
     console.error('Error fetching projects:', error);
   }
 };
 
-// 컴포넌트가 마운트될 때 프로젝트 데이터 가져오기
-onMounted(fetchProjects);
+onMounted(getProjects);
 
 const clickBookmarkonly = () => {
   onlyBookmarked.value = !onlyBookmarked.value;
@@ -178,10 +177,10 @@ const clickneededonly = () => {
   onlyNeeded.value = !onlyNeeded.value;
 };
 
-// 특정 게시물의 북마크 상태를 토글하는 함수
+// 특정 게시물의 북마크 상태 변경
 const toggleBookmark = (item) => {
-  item.isBookmarked = !item.isBookmarked; // 해당 게시물의 북마크 상태 반전
-  localStorage.setItem('bookmarkedItems', JSON.stringify(arr.value)); // 로컬 스토리지에 저장 (필요 시)
+  item.isBookmarked = !item.isBookmarked; // 누른 게시물 북마크 상태 반전
+  localStorage.setItem('bookmarkedItems', JSON.stringify(arr.value)); // 로컬 스토리지에 저장
 };
 
 //페이지 수
