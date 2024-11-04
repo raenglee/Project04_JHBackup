@@ -1,8 +1,19 @@
 <template>
-  <div class="pt-7">
-    <div class="border border-gray-400">마이포스트</div>
-    <div>내가적은글을</div>
-    <div>확인하는 공간</div>
+  <div class="pt-7 px-2">
+    <div class="flex flex-col gap-2">
+      <p class="text-sm">작성 date</p>
+      <div class="flex justify-between items-center text-center">
+        <div class="flex gap-3">
+          <p class="border border-gray-200 rounded-full bg-gray-200 text-sm px-2">지역/구분</p>
+          <p>제목</p>
+          <p class="text-sm">댓글수</p>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <button type="button">수정</button>
+          <button type="button">삭제</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

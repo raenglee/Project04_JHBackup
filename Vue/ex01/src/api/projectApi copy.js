@@ -63,13 +63,9 @@ export const patchProject = async (board_id) => {
   }
 };
 
-export const listProject = async (pageNumber = 1, pageSize = 16) => {
+export const listProject = async () => {
   try {
-    const res = await axios.get(`${url}?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const res = await axios.get(`${url}`);
     return res.data;
   } catch (e) {
     console.log(e);

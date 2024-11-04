@@ -150,7 +150,7 @@
 
       <!-- 취소, 등록 버튼 -->
       <div class="flex justify-center space-x-4 pt-4 mt-5 mb-5">
-        <button type="button" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-gray-300 hover:text-black hover:border-gray-300" @click="cancel">취소</button>
+        <button type="button" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-gray-300 hover:text-black hover:border-gray-300">취소</button>
         <button type="submit" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-[#d10000] hover:text-white hover:border-[#d10000]" @click="save">등록</button>
       </div>
     </div>
@@ -162,9 +162,15 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { FontAwesomeIcon } from '@/assets/FontAwesome';
 import { saveProject } from '@/api/projectApi';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
-const router = useRouter();
+const router = useRoute();
+const myfile = ref([]);
+const title = ref('');
+const content = ref('');
+const location = ref('');
+const project_period = ref('');
+const start_date = ref('');
 
 //날짜 오늘 날짜 전 선택 불가능하도록
 const minDate = computed(() => {
@@ -251,11 +257,9 @@ const decreaseCount = (index) => {
   }
 };
 
-//파일 첨부 및 저장
+//파일 첨부 및 저장?
 
 // 드롭 파일 첨부
-const myfile = ref([]);
-
 const dropFile = (e) => {
   myfile.value = []; // 드롭 시 기존 파일 목록 초기화
   const data = e.dataTransfer;
@@ -270,57 +274,65 @@ const getFileUrl = (file) => {
   return URL.createObjectURL(file);
 };
 
-// 게시글 등록 취소
-const cancel = () => {
-  console.log('취소버튼 눌리는지 확인');
-  router.push({ name: 'projectlist' });
+// 이미지 파일 확인
+const isImageFile = (file) => {
+  return file.type.startsWith('image/');
 };
-
-//게시글 등록
-
-const title = ref('');
-const content = ref('');
-const location = ref('');
-const project_period = ref('');
-const start_date = ref('');
 
 const save = async () => {
-  const data = {
-    // title: title.value.vlaue,
-    // content: content.value,
-    // imageUrl: 'string',
-    // projectPeriod: 1,
-    // location: 'SEOUL',
-    // startDate: '2024-11-04',
-    // recruitEndDate: '2024-11-04',
-    // boardTechStackList: [
-    //   {
-    //     techStackName: 'JAVA'
-    //   }
-    // ],
-    // boardPositionList: [
-    //   {
-    //     positionName: 'BackEnd',
-    //     requiredCount: 5,
-    //     currentCount: 0
-    //   }
-    // ]
-  };
-
   const formData = new FormData();
 
-  formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-  formData.append('file', myfile.value);
-
-  const res = await saveProject(formData);
-
-  if (res.status === 200) {
-    alert('저장하였습니다.');
-    router.push({ name: 'projectlist' });
-    return;
+  for (const file of myfile.value) {
+    formData.append('files', file); // 여러 파일 추가
   }
-  alert('에러' + res.response.data.message);
+
+  const fileDto = {
+    title: title.value,
+    location: location.value,
+    content: content.value,
+    project_period: project_period.value,
+    start_date: start_date.value
+  };
+
+  formData.append('fileDto', new Blob([JSON.stringify({ name: 'filename' })], { type: 'application/json' }));
+
+  try {
+    const res = await saveProject(formData); // ProjectApi에서 가져온 saveProject 호출
+
+    if (res.status === 200) {
+      alert('저장하였습니다.');
+      router.push({ name: 'projectlist' });
+    }
+  } catch (error) {
+    alert('에러: ' + error.response.data.message);
+  }
 };
+
+//게시글 저장
+
+// const save = async () => {
+//   const data = {
+//     title: title.value,
+//     content: content.value,
+//     // projectPeriod: projectPeriod.value,
+//     location: location.value
+//     // recruitEndDate: recruitEndDate.value,
+//     // boardTechStackList: boardTechStackList.value,
+//     // boardPositionList: boardPositionList.value
+//   };
+
+//   const formData = new FormData();
+//   // formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+//   // formData.append('file', myfile.value);
+
+//   const res = await saveProject(formData);
+//   if (res.status == 200) {
+//     alert('저장하였습니다.');
+//     router.push({ name: 'projectlist' });
+//     return;
+//   }
+//   alert('에러' + res.response.data.message);
+// };
 </script>
 
 <style lang="scss" scoped></style>
