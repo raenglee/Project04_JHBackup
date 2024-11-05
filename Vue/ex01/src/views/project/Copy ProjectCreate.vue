@@ -10,22 +10,16 @@
       <h1 class="font-bold text-lg mb-2">프로젝트 명</h1>
       <input type="text" v-model="title" class="min-w-full h-10 border border-gray-200 justify-center items-center rounded-full p-3 focus:outline-none" placeholder="프로젝트 명을 입력하세요." />
 
-      <!--🔜지역/구분, 진행 기간, 모집 마감일-->
+      <!--지역/구분, 진행 기간, 모집 마감일-->
       <div class="flex justify-between gap-5 mt-5 flex-wrap">
-        <!--지역 / 구분 드롭다운-->
+        <!--🌍지역 / 구분 드롭다운-->
         <div class="flex flex-col">
           <h1 class="font-bold text-lg pb-2">지역 / 구분</h1>
           <select v-model="location" class="w-52 h-10 p-2 border border-gray-200 rounded-full cursor-pointer focus:outline-none">
-            <option value="" disabled>{{ location ? location : '지역을 선택하세요' }}</option>
-            <option>온라인</option>
-            <option>서울</option>
-            <option>부산</option>
-            <option>대구</option>
-            <option>인천</option>
-            <option>광주</option>
-            <option>대전</option>
-            <option>울산</option>
-            <option>기타</option>
+            <option disabled value="">지역 / 구분을 선택하세요</option>
+            <option v-for="location in locationOptions" :key="location" :value="location">
+              {{ location }}
+            </option>
           </select>
         </div>
 
@@ -48,29 +42,34 @@
         <!-- 모집 마감일 -->
         <div class="flex flex-col">
           <h1 class="font-bold text-lg pb-2">모집 마감일</h1>
-          <input v-model="start_date" type="date" class="w-52 h-10 p-2 border border-gray-200 rounded-full focus:outline-none" :min="minDate" />
+          <input v-model="recruit_end_date" type="date" class="w-52 h-10 p-2 border border-gray-200 rounded-full focus:outline-none" :min="minDate" />
         </div>
       </div>
+
       <!--✅기술/언어 선택 -> 다중선택, 선택삭제 가능하도록-->
       <div class="flex flex-col justify-between mt-5" ref="dropdownContainer">
         <h1 class="font-bold text-lg pb-2">기술 / 언어 (최대 10개)</h1>
 
         <div class="relative w-full m-auto flex">
-          <div @click="toggleDropdown" class="w-72 h-10 p-2 border border-gray-200 rounded-full cursor-pointer flex items-center justify-between">
+          <div @click="toggleDropdown" class="min-w-72 h-10 p-2 border border-gray-200 rounded-full cursor-pointer flex items-center justify-between">
             <span>{{ selectedSkill.value || '기술을 선택하세요' }}</span>
             <font-awesome-icon icon="chevron-down" class="text-gray-300 pl-2" />
           </div>
-
-          <div v-if="isDropdownOpen" class="absolute bg-white border border-gray-200 rounded-lg mt-12 ml-1 w-52 z-10">
-            <div v-for="tech in availableTechOptions" :key="tech" @click="selectSkill(tech)" class="p-2 hover:bg-gray-200 cursor-pointer">
-              {{ tech }}
+          <!--드롭다운-->
+          <div v-if="isDropdownOpen" class="absolute bg-white border border-gray-200 rounded-lg mt-12 ml-1 min-w-96 z-10">
+            <div class="grid grid-cols-5 gap-2 p-2">
+              <div v-for="tech in availableTechOptions" :key="tech" @click="selectSkill(tech)" class="cursor-pointer text-sm gap-3">
+                <img :src="tech.imageUrl" class="tech-image w-10 h-10" />
+                <p class="">{{ tech.techStackName }}</p>
+              </div>
             </div>
           </div>
 
           <div class="flex flex-wrap">
-            <div v-for="(skill, index) in selectedSkills" :key="index" @click="removeSkill(index)" class="border rounded-full p-2 ml-2 mb-2 flex items-center space-x-2 cursor-pointer">
-              <span>{{ skill }}</span>
-              <p class="text-[#d10000] font-bold">x</p>
+            <div v-for="(skill, index) in selectedSkills" :key="index" @click="removeSkill(index)" class="pl-4 mt-1 mb-3 flex items-center gap-2 cursor-pointer">
+              <img :src="skill.imageUrl" class="w-8 h-8" />
+              <span class="text-sm m-auto w-16"> {{ skill.techStackName }}</span>
+              <p class="text-[#d10000] font-bold mx-3">x</p>
             </div>
           </div>
         </div>
@@ -82,9 +81,10 @@
       </div>
       <div>
         <div v-for="(position, index) in positions" :key="index" class="flex items-center space-x-7 mb-3">
+          <!-- 포지션 선택 부분 -->
           <select v-model="position.role" class="w-1/2 h-10 p-2 border border-gray-200 rounded-full focus:outline-none">
             <option disabled value="">분야를 선택하세요</option>
-            <option v-for="role in roleOptions" :key="role">{{ role }}</option>
+            <option v-for="role in roleOptions" :key="role.positionName">{{ role.positionName }}</option>
           </select>
 
           <!-- 사람 수 조절 버튼 -->
@@ -150,7 +150,7 @@
 
       <!-- 취소, 등록 버튼 -->
       <div class="flex justify-center space-x-4 pt-4 mt-5 mb-5">
-        <button type="button" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-gray-300 hover:text-black hover:border-gray-300">취소</button>
+        <button type="button" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-gray-300 hover:text-black hover:border-gray-300" @click="cancel">취소</button>
         <button type="submit" class="text-m px-3 py-1 border border-gray-200 rounded-full hover:bg-[#d10000] hover:text-white hover:border-[#d10000]" @click="save">등록</button>
       </div>
     </div>
@@ -161,36 +161,58 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { FontAwesomeIcon } from '@/assets/FontAwesome';
-import { saveProject } from '@/api/projectApi';
-import { useRoute } from 'vue-router';
+import { getPositions, saveProject, getTechstacks, getLocation } from '@/api/projectApi';
+import { useRouter } from 'vue-router';
 
-const router = useRoute();
-const myfile = ref([]);
-const title = ref('');
-const content = ref('');
-const location = ref('');
-const project_period = ref('');
-const start_date = ref('');
+const router = useRouter();
+const isDropdownOpen = ref(false); // 드롭다운 닫힌(false) 상태
 
-//날짜 오늘 날짜 전 선택 불가능하도록
-const minDate = computed(() => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // 0부터 시작하므로 +1
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`; // 현재 날짜를 YYYY-MM-DD 형식으로 반환
-});
+// 🌍지역 / 구분 선택 관련 scripts
+const locationOptions = ref([]); // 서버에서 전달 받은 지역 저장
+
+const updateLocations = async () => {
+  try {
+    const res = await getLocation();
+    // console.log('updateLocations : ', res.data);
+    if (Array.isArray(res.data)) {
+      locationOptions.value = res.data; // 목록이 이름 하나이므로 배열에 넣을 필요X
+    } else {
+      console.error('에러발생');
+    }
+  } catch (error) {
+    console.error('실패:', error);
+  }
+};
 
 // ✅ 기술 / 언어 선택 관련 scripts
+
 const selectedSkill = ref(''); // 현재 선택된 기술 저장
 const selectedSkills = ref([]); // 선택된 기술들의 배열
-const techOptions = ['JAVA', 'Python', 'JavaScript', 'Spring', 'React', 'Node.js', 'Vue', 'Angular', 'Django', 'Kotlin']; // 모든 기술목록 저장 배열
+const techOptions = ref([]); // 서버에서 전달 받은 기술 저장
 
-const isDropdownOpen = ref(false); // 드롭다운 열림 상태
+// 기술 / 언어 서버 연결
+const updateTechstacks = async () => {
+  try {
+    const res = await getTechstacks();
+    // console.log('updateTechstacks : ', res);
+    // techOptions.value = res.result; // 받아온 기술 목록을 techOptions에 저장
+    if (Array.isArray(res)) {
+      techOptions.value = res.map((item) => ({
+        // 받아오는 정보가 두개이상이므로 map으로 가져온다.
+        techStackName: item.techStackName,
+        imageUrl: item.imageUrl
+      }));
+    } else {
+      console.error('배열 저장 에러');
+    }
+  } catch (error) {
+    console.error('실패:', error);
+  }
+};
 
 // 선택된 기술을 제외한 선택 가능한 기술목록
 const availableTechOptions = computed(() => {
-  return techOptions.filter((tech) => !selectedSkills.value.includes(tech));
+  return techOptions.value.filter((tech) => !selectedSkills.value.includes(tech));
 });
 
 // 드롭다운 열고 닫기
@@ -200,7 +222,7 @@ const toggleDropdown = () => {
 
 // 기술 선택
 const selectSkill = (tech) => {
-  if (!selectedSkills.value.includes(tech)) {
+  if (!selectedSkills.value.includes(tech) && selectedSkills.value.length < 10) {
     selectedSkills.value.push(tech);
   }
 
@@ -218,15 +240,9 @@ const removeSkill = (index) => {
 // 바탕 클릭 이벤트 처리
 const handleClickOutside = (event) => {
   if (!event.target.closest('.relative') && isDropdownOpen.value) {
-    // 드롭다운 내부가 아닌 경우 닫기
     isDropdownOpen.value = false;
   }
 };
-
-// 이벤트 리스너 등록
-onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside);
-});
 
 // 컴포넌트 언마운트 시 이벤트 리스너 제거
 onBeforeUnmount(() => {
@@ -234,32 +250,55 @@ onBeforeUnmount(() => {
 });
 
 //🚹 분야별 모집 인원 관련 scripts
+
 const positions = ref([{ role: '', count: 1 }]);
-const roleOptions = ref(['프론트엔드', '백엔드', '디자이너', 'PM', '기획자', '데브옵스', '안드로이드 개발자', 'IOS 개발자', '크로스 플랫폼 개발자']);
+const roleOptions = ref([]); // 서버에서 전달 받은 포지션 저장
 
-// roleOptions.value = res.data;
-
-const addPosition = () => {
-  positions.value.push({ role: '', count: 1 });
+// 포지션 서버 연결
+const updatePositions = async () => {
+  try {
+    const res = await getPositions();
+    // console.log('updatePsotions : ', res.data.result);
+    if (Array.isArray(res.data.result)) {
+      roleOptions.value = res.data.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
+    } else {
+      console.error('에러발생');
+    }
+  } catch (error) {
+    console.error('실패:', error);
+  }
 };
 
+// 포지션 추가
+const addPosition = () => {
+  positions.value.push({
+    role: '', // 기본적으로 빈 값으로 설정하여 '분야를 선택하세요'가 표시되도록 함
+    count: 1 // 기본적으로 사람 수는 1로 설정
+  });
+};
+
+// 포지션 삭제
 const removePosition = (index) => {
   positions.value.splice(index, 1);
 };
 
+// 사람 수 증가
 const increaseCount = (index) => {
   positions.value[index].count += 1;
 };
 
+// 사람 수 감소
 const decreaseCount = (index) => {
   if (positions.value[index].count > 1) {
     positions.value[index].count -= 1;
   }
 };
 
-//파일 첨부 및 저장?
+//파일 첨부 및 저장
 
 // 드롭 파일 첨부
+const myfile = ref([]);
+
 const dropFile = (e) => {
   myfile.value = []; // 드롭 시 기존 파일 목록 초기화
   const data = e.dataTransfer;
@@ -274,65 +313,75 @@ const getFileUrl = (file) => {
   return URL.createObjectURL(file);
 };
 
-// 이미지 파일 확인
-const isImageFile = (file) => {
-  return file.type.startsWith('image/');
+// 게시글 등록 취소
+const cancel = () => {
+  console.log('취소버튼 눌리는지 확인');
+  router.push({ name: 'projectlist' });
 };
+
+//게시글 등록
+const title = ref(''); // 제목 v-model
+const content = ref(''); // 내용 v-model
+const location = ref(''); // 지역 v-model
+const project_period = ref(''); // 진행기간 v-model
+const recruit_end_date = ref(''); // 모집 마감일 v-model
+// const roleposition = ref(''); // 포지션 v-model
 
 const save = async () => {
-  const formData = new FormData();
-
-  for (const file of myfile.value) {
-    formData.append('files', file); // 여러 파일 추가
-  }
-
-  const fileDto = {
+  const data = {
     title: title.value,
-    location: location.value,
     content: content.value,
-    project_period: project_period.value,
-    start_date: start_date.value
+    //imageUrl: myfile.value ? myfile.value.name : '',  // 이미지 URL (파일이 있으면 파일명 사용)
+    projectPeriod: project_period.value,
+    location: location.value,
+    startDate: start_date.value,
+    recruitEndDate: recruit_end_date.value,
+    boardTechStackList: selectedSkills.value.map((skill) => ({
+      techStackName: skill.techStackName
+    })),
+    boardPositionList: positions.value.map((position) => ({
+      positionName: position.role, // 사용자가 선택한 포지션 이름
+      requiredCount: 1, // 포지션당 요구되는 인원 수 (고정값 5)
+      currentCount: position.count // 사용자가 설정한 현재 모집 인원 수
+    }))
   };
 
-  formData.append('fileDto', new Blob([JSON.stringify({ name: 'filename' })], { type: 'application/json' }));
+  // boardPositionList: roleposition.value
 
-  try {
-    const res = await saveProject(formData); // ProjectApi에서 가져온 saveProject 호출
+  const formData = new FormData();
 
-    if (res.status === 200) {
-      alert('저장하였습니다.');
-      router.push({ name: 'projectlist' });
-    }
-  } catch (error) {
-    alert('에러: ' + error.response.data.message);
+  formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+  formData.append('file', myfile.value);
+
+  const res = await saveProject(formData);
+
+  if (res.status === 200) {
+    alert('저장하였습니다.');
+    router.push({ name: 'projectlist' });
+    return;
   }
+  alert('에러' + res.response.data.message);
 };
 
-//게시글 저장
+//날짜 오늘 날짜 전 선택 불가능하도록
+const start_date = ref('');
 
-// const save = async () => {
-//   const data = {
-//     title: title.value,
-//     content: content.value,
-//     // projectPeriod: projectPeriod.value,
-//     location: location.value
-//     // recruitEndDate: recruitEndDate.value,
-//     // boardTechStackList: boardTechStackList.value,
-//     // boardPositionList: boardPositionList.value
-//   };
+const minDate = computed(() => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // 0부터 시작하므로 +1
+  const day = String(today.getDate()).padStart(2, '0');
+  start_date.value = `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}`; // 현재 날짜를 YYYY-MM-DD 형식으로 반환
+});
 
-//   const formData = new FormData();
-//   // formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-//   // formData.append('file', myfile.value);
-
-//   const res = await saveProject(formData);
-//   if (res.status == 200) {
-//     alert('저장하였습니다.');
-//     router.push({ name: 'projectlist' });
-//     return;
-//   }
-//   alert('에러' + res.response.data.message);
-// };
+// 이벤트 리스너
+onMounted(() => {
+  updateTechstacks(); // 기술, 언어 API 호출
+  updatePositions(); // 포지션 API 호출
+  updateLocations(); // 지역 API 호출
+  document.addEventListener('mousedown', handleClickOutside); // 바탕 클릭 시 드롭다운 닫기
+});
 </script>
 
 <style lang="scss" scoped></style>

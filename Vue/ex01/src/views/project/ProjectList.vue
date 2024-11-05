@@ -135,13 +135,13 @@
       </div>
 
       <!--페이지-->
-      <div class="flex justify-center mt-5">
+      <!-- <div class="flex justify-center mt-5">
         <ul class="flex space-x-2">
           <li class="cursor-pointer p-3" v-for="(num, index) in totalPages" v-bind:key="index" @click="setPageNum(num - 1)">
             {{ num }}
           </li>
         </ul>
-      </div>
+      </div> -->
     </section>
   </div>
 
@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { listProject } from '@/api/projectApi';
 
 const searchText = ref('');
@@ -161,7 +161,7 @@ const arr = ref([]); // 게시물 배열
 const getProjects = async () => {
   try {
     const res = await listProject();
-    arr.value = res.map((item) => ({ ...item, isBookmarked: false }));
+    arr.value = res.result.map((item) => ({ ...item, isBookmarked: false }));
   } catch (error) {
     console.error('Error fetching projects:', error);
   }
@@ -182,7 +182,6 @@ const toggleBookmark = (item) => {
   item.isBookmarked = !item.isBookmarked; // 누른 게시물 북마크 상태 반전
   localStorage.setItem('bookmarkedItems', JSON.stringify(arr.value)); // 로컬 스토리지에 저장
 };
-
 
 // 포지션 드롭다운
 const positionOptions = ref(['프론트엔드', '백엔드', '디자이너', 'PM', '기획자', '데브옵스', '안드로이드 개발자', 'IOS 개발자', '크로스 플랫폼 개발자']);

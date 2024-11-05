@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// const url = 'http://192.168.0.61:8080';
 const url = 'http://localhost:8080';
 
 export const authSocial = async () => {

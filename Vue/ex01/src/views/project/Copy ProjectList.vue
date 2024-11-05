@@ -135,13 +135,13 @@
       </div>
 
       <!--페이지-->
-      <div class="flex justify-center mt-5">
+      <!-- <div class="flex justify-center mt-5">
         <ul class="flex space-x-2">
           <li class="cursor-pointer p-3" v-for="(num, index) in totalPages" v-bind:key="index" @click="setPageNum(num - 1)">
             {{ num }}
           </li>
         </ul>
-      </div>
+      </div> -->
     </section>
   </div>
 
@@ -161,7 +161,7 @@ const arr = ref([]); // 게시물 배열
 const getProjects = async () => {
   try {
     const res = await listProject();
-    arr.value = res.map((item) => ({ ...item, isBookmarked: false }));
+    arr.value = res.result.map((item) => ({ ...item, isBookmarked: false }));
   } catch (error) {
     console.error('Error fetching projects:', error);
   }
@@ -182,69 +182,6 @@ const toggleBookmark = (item) => {
   item.isBookmarked = !item.isBookmarked; // 누른 게시물 북마크 상태 반전
   localStorage.setItem('bookmarkedItems', JSON.stringify(arr.value)); // 로컬 스토리지에 저장
 };
-
-//페이지 수
-const totalPages = ref(10);
-const pageNum = ref(0);
-
-const setPageNum = async (num) => {
-  console.log('setPageNum 호출됨, 페이지 번호:', num);
-  pageNum.value = num;
-
-  try {
-    const res = await listProject(num + 1); // 페이지 번호 1부터 시작
-
-    if (res && res.data) {
-      arr.value = res.data.list || [];
-      totalPages.value = res.data.totalPages || 0; // 총 페이지 수 설정
-    } else {
-      console.error('API 응답 오류:', res);
-      arr.value = []; // 오류 발생 시 배열 초기화
-    }
-  } catch (error) {
-    console.error('API 요청 중 오류 발생:', error);
-    arr.value = []; // 오류 발생 시 배열 초기화
-  }
-};
-
-watchEffect(async () => {
-  try {
-    const res = await listProject(); // 기본 페이지 요청
-    if (res && res.data) {
-      arr.value = res.data.list || []; // 데이터가 없으면 빈 배열로 초기화
-      totalPages.value = res.data.totalPages || 0; // 총 페이지 수 설정
-      console.log('초기 API 응답 데이터:', res.data); // 초기 로드 데이터 로깅
-    }
-  } catch (error) {
-    console.error('초기 API 요청 중 오류 발생:', error);
-  }
-});
-
-// const setPageNum = async (num) => {
-//   console.log('setPageNum 호출됨, 페이지 번호:', num);
-//   pageNum.value = num;
-//   const res = await listProject(num);
-//   console.log('페이지' + res);
-//   arr.value = res.data.list;
-//   totalPages.value = res.data.totalPages;
-// };
-
-// watchEffect(async () => {
-//   const res = await listProject(1); // 기본적으로 1페이지부터 호출
-//   if (res && res.data) {
-//     arr.value = res.data.list; // 데이터가 있을 경우 배열에 할당
-//     totalPages.value = res.data.totalPages; // 총 페이지 수 설정
-//   } else {
-//     console.error('API 응답 오류:', res);
-//     arr.value = []; // 오류 발생 시 배열 초기화
-//   }
-// });
-
-// watchEffect(async () => {
-//   const res = await listProject();
-//   console.log(res);
-//   arr.value = res.data.list;
-// });
 
 // 포지션 드롭다운
 const positionOptions = ref(['프론트엔드', '백엔드', '디자이너', 'PM', '기획자', '데브옵스', '안드로이드 개발자', 'IOS 개발자', '크로스 플랫폼 개발자']);
