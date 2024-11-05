@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { listProject } from '@/api/projectApi';
 
 const searchText = ref('');
@@ -167,7 +167,7 @@ const getProjects = async () => {
   }
 };
 
-onMounted(getProjects);
+// onMounted(getProjects);
 
 const clickBookmarkonly = () => {
   onlyBookmarked.value = !onlyBookmarked.value;
@@ -227,6 +227,7 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   window.addEventListener('click', handleClickOutside);
+  getProjects();
 });
 
 onUnmounted(() => {

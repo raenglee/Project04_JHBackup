@@ -52,18 +52,19 @@
               <font-awesome-icon icon="chevron-down" class="text-gray-300 pl-2" />
             </div>
             <div v-if="activeDropdown === 'tech'" class="absolute bg-white border border-gray rounded-md z-10 w-96 p-4">
-              <div class="grid grid-cols-4 gap-4">
-                <div v-for="(option, index) in techOptions" :key="index" class="flex items-center">
-                  <label :class="{ 'text-gray-300': selected.includes(option) }" @click="toggleTechSelection(option)" class="cursor-pointer">
-                    {{ option }}
+              <div class="grid grid-cols-5 gap-6">
+                <div v-for="(option, index) in techOptions" :key="index" class="flex items-center m-auto ">
+                  <label :class="{ 'text-gray-300 opacity-40': selected.includes(option) }" @click="toggleTechSelection(option)" class="cursor-pointer">
+                    <img :src="option.imageUrl" class="w-10 h-10 item-center ju" />
+                    <p class="text-sm">{{ option.techStackName }}</p>
                   </label>
                 </div>
               </div>
               <div class="mt-5">
-                <span class="text-sm font-semibold">선택한 것</span>
+                <span class="text-sm font-semibold">선택 항목</span>
                 <div class="flex flex-wrap">
                   <span v-for="(item, index) in selected" :key="index" class="mr-3 bg-gray-200 text-sm rounded-full px-2 py-1 mt-2">
-                    {{ item }}
+                    <p class="">{{ item.techStackName }}</p>
                   </span>
                 </div>
               </div>
@@ -105,7 +106,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
           <div v-for="item in arr" :key="item.id" class="border rounded-2xl p-4 relative">
             <div class="top-4 flex items-center justify-between">
-              <div class="border px-2 rounded-full mb-2 bg-gray-200">{{ selectedLocation }} 지역</div>
+              <div class="border px-2 rounded-full mb-2 bg-gray-200">{{ location }} 지역</div>
               <font-awesome-icon
                 :icon="item.isBookmarked ? ['fas', 'bookmark'] : ['far', 'bookmark']"
                 :class="[item.isBookmarked ? 'text-[#7371fc]' : 'text-gray-400', 'cursor-pointer']"
@@ -150,7 +151,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { listProject } from '@/api/projectApi';
+import { getTechstacks, listProject } from '@/api/projectApi';
 
 const searchText = ref('');
 const onlyBookmarked = ref(false);
@@ -167,7 +168,7 @@ const getProjects = async () => {
   }
 };
 
-onMounted(getProjects);
+// onMounted(getProjects);
 
 const clickBookmarkonly = () => {
   onlyBookmarked.value = !onlyBookmarked.value;
@@ -187,8 +188,31 @@ const toggleBookmark = (item) => {
 const positionOptions = ref(['프론트엔드', '백엔드', '디자이너', 'PM', '기획자', '데브옵스', '안드로이드 개발자', 'IOS 개발자', '크로스 플랫폼 개발자']);
 const selectedPosition = ref(''); // 단일 선택
 // 기술/언어 드롭다운
-const techOptions = ref(['JAVA', 'JavaScript', 'PHP', 'Python', 'C#', 'Figma', 'Vue', 'Node.js', 'React', 'Django']);
+const techOptions = ref([]);
 const selected = ref([]); // 다중 선택
+
+
+const slelctTechstacks = async () => {
+  try {
+    const res = await getTechstacks();
+    console.log('selectTechstacks : ', res);
+    // techOptions.value = res.result; // 받아온 기술 목록을 techOptions에 저장
+    if (Array.isArray(res)) {
+      techOptions.value = res.map((item) => ({
+        // 받아오는 정보가 두개이상이므로 map으로 가져온다.
+        techStackName: item.techStackName,
+        imageUrl: item.imageUrl
+      }));
+    } else {
+      console.error('배열 저장 에러');
+    }
+  } catch (error) {
+    console.error('실패:', error);
+  }
+};
+
+
+
 // 지역/구분 드롭다운
 const locationOptions = ref(['온라인', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '기타']);
 const selectedLocation = ref(''); // 단일 선택
@@ -227,6 +251,8 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   window.addEventListener('click', handleClickOutside);
+  getProjects();
+  slelctTechstacks();
 });
 
 onUnmounted(() => {

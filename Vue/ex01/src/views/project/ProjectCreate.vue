@@ -59,8 +59,8 @@
           <div v-if="isDropdownOpen" class="absolute bg-white border border-gray-200 rounded-lg mt-12 ml-1 min-w-96 z-10">
             <div class="grid grid-cols-5 gap-2 p-2">
               <div v-for="tech in availableTechOptions" :key="tech" @click="selectSkill(tech)" class="cursor-pointer text-sm gap-3">
-                <img :src="tech.imageUrl" class="tech-image w-10 h-10" />
-                <p class="">{{ tech.techStackName }}</p>
+             <img :src="tech.imageUrl" class="tech-image w-10 h-10" />
+                <p class="">{{ tech.techStackName }}</p>   
               </div>
             </div>
           </div>
@@ -328,40 +328,61 @@ const recruit_end_date = ref(''); // 모집 마감일 v-model
 // const roleposition = ref(''); // 포지션 v-model
 
 const save = async () => {
+
+  const res = await saveProject(data);
+
   const data = {
     title: title.value,
-    content: content.value,
-    //imageUrl: myfile.value ? myfile.value.name : '',  // 이미지 URL (파일이 있으면 파일명 사용)
-    projectPeriod: project_period.value,
-    location: location.value,
-    startDate: start_date.value,
-    recruitEndDate: recruit_end_date.value,
-    boardTechStackList: selectedSkills.value.map((skill) => ({
-      techStackName: skill.techStackName
-    })),
-    boardPositionList: positions.value.map((position) => ({
-      positionName: position.role, // 사용자가 선택한 포지션 이름
-      requiredCount: 1, // 포지션당 요구되는 인원 수 (고정값 5)
-      currentCount: position.count // 사용자가 설정한 현재 모집 인원 수
-    }))
-  };
+        content: content.value,
+        // imageUrl: 'string',
+        projectPeriod: project_period.value,
+        location: location.value,
+        startDate: start_date.value,
+        recruitEndDate: recruit_end_date.value,
+        boardTechStackList: [
+          {
+            // techStackName: skill.techStackName
+          }
+        ],
+        boardPositionList: [
+          {
+            // positionName: position.role,
+            requiredCount: 5,
+            // currentCount: position.count
+          }
+          ]
+    };
+
+    if (res.status === 200) {
+      alert('저장하였습니다.');
+      router.push({ name: 'projectlist' });
+      return;
+    }
+    alert('에러: ' + res.data.message); // 응답 구조에 맞게 수정
+};
+    // title: title.value,
+    // content: content.value,
+    // //imageUrl: myfile.value ? myfile.value.name : '',  // 이미지 URL (파일이 있으면 파일명 사용)
+    // projectPeriod: project_period.value,
+    // location: location.value,
+    // startDate: start_date.value,
+    // recruitEndDate: recruit_end_date.value,
+    // boardTechStackList: selectedSkills.value.map((skill) => ({
+    //   techStackName: skill.techStackName
+    // })),
+    // boardPositionList: positions.value.map((position) => ({
+    //   positionName: position.role, // 사용자가 선택한 포지션 이름
+    //   requiredCount: 1, // 포지션당 요구되는 인원 수 (고정값 5)
+    //   currentCount: position.count // 사용자가 설정한 현재 모집 인원 수
+    // }))
 
   // boardPositionList: roleposition.value
 
-  const formData = new FormData();
+  // const formData = new FormData();
 
-  formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-  formData.append('file', myfile.value);
+  // formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+  // formData.append('file', myfile.value);
 
-  const res = await saveProject(formData);
-
-  if (res.status === 200) {
-    alert('저장하였습니다.');
-    router.push({ name: 'projectlist' });
-    return;
-  }
-  alert('에러' + res.response.data.message);
-};
 
 //날짜 오늘 날짜 전 선택 불가능하도록
 const start_date = ref('');
