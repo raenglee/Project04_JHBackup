@@ -27,7 +27,7 @@ export const saveProject = async (data) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log(res);
+    console.log('저장', res);
     return res;
   } catch (e) {
     console.log('저장 Api 에러 발생:', e.response ? e.response.data : e.message);
@@ -61,7 +61,7 @@ export const listProject = async (pageNumber = 1, pageSize = 16) => {
 
   try {
     const res = await axios.get(`${url}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-    console.log(res);
+    // console.log('리스트 가져오기 axios 연결: ',res);
     return res.data;
   } catch (e) {
     console.log(e);
