@@ -297,34 +297,35 @@ const decreaseCount = (index) => {
 //파일 첨부 및 저장
 
 // 드롭 파일 첨부
-const myfile = ref([]);
+// const myfile = ref([]);
 
-const dropFile = (e) => {
-  myfile.value = []; // 드롭 시 기존 파일 목록 초기화
-  const data = e.dataTransfer;
+// const dropFile = (e) => {
+//   myfile.value = []; // 드롭 시 기존 파일 목록 초기화
+//   const data = e.dataTransfer;
 
-  for (let i = 0; i < data.files.length; i++) {
-    myfile.value.push(data.files[i]); // 드롭된 파일 배열에 추가
-  }
-};
+//   for (let i = 0; i < data.files.length; i++) {
+//     myfile.value.push(data.files[i]); // 드롭된 파일 배열에 추가
+//   }
+// };
 
-// 파일 미리보기 URL 생성
-const getFileUrl = (file) => {
-  return URL.createObjectURL(file);
-};
+// // 파일 미리보기 URL 생성
+// const getFileUrl = (file) => {
+//   return URL.createObjectURL(file);
+// };
 
 // 게시글 등록 취소
+
 const cancel = () => {
   console.log('취소버튼 눌리는지 확인');
   router.push({ name: 'projectlist' });
 };
 
-//게시글 등록
-const title = ref(''); // 제목 v-model
-const content = ref(''); // 내용 v-model
-const location = ref(''); // 지역 v-model
-const project_period = ref(''); // 진행기간 v-model
-const recruit_end_date = ref(''); // 모집 마감일 v-model
+// 게시글 등록
+const title = ref('');
+const content = ref('');
+const location = ref('');
+const project_period = ref('');
+const recruit_end_date = ref('');
 
 const save = async () => {
   const data = {
@@ -351,7 +352,7 @@ const save = async () => {
   alert('에러: ' + res.data.message);
 };
 
-//날짜 오늘 날짜 전 선택 불가능하도록
+// 날짜 오늘 날짜 전 선택 불가능하도록
 const start_date = ref('');
 
 const minDate = computed(() => {
