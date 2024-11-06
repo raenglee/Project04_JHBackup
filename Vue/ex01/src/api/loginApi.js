@@ -1,7 +1,9 @@
 import axios from 'axios';
+// import { GLOBAL_URL } from './util';
 
 // const url = 'http://192.168.0.61:8080';
 const url = 'http://localhost:8080';
+// const url = GLOBAL_URL
 
 export const authSocial = async () => {
   try {
@@ -21,7 +23,7 @@ export const loginUsers = async () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log(res.data);
+    // console.log(res.data);///
     return res.data;
   } catch (err) {
     console.error(err);

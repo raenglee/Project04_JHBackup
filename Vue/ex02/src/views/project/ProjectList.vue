@@ -193,7 +193,7 @@ const totalPeople = computed(() => {
 const getProjects = async () => {
   try {
     const res = await listProject();
-    arr.value = res.result.map((item) => ({ ...item, isBookmarked: false }));
+    arr.value = res.map((item) => ({ ...item, isBookmarked: false }));
   } catch (error) {
     console.error('프로젝트 가져오기 오류:', error);
   }
@@ -226,10 +226,10 @@ const selected = ref([]); // 다중 선택
 const slelctTechstacks = async () => {
   try {
     const res = await getTechstacks();
-    // console.log('selectTechstacks 가져오기 : ', res);
+    console.log('selectTechstacks 가져오기 : ', res);
     // techOptions.value = res.result; // 받아온 기술 목록을 techOptions에 저장
-    if (Array.isArray(res.data.result.result)) {
-      techOptions.value = res.data.result.result.map((item) => ({
+    if (Array.isArray(res.data.result)) {
+      techOptions.value = res.data.result.map((item) => ({
         // 받아오는 정보가 두개이상이므로 map으로 가져온다.
         techStackName: item.techStackName,
         imageUrl: item.imageUrl

@@ -3,31 +3,22 @@
 // // const url = 'http://192.168.0.61:8080/api/v1/boards';
 // const url = 'http://localhost:8080/api/v1/boards';
 
-// export const saveProject = async () => {
+// export const saveProject = async (formData) => {
 //   console.log('저장axios 호출');
+//   // console.log('토큰: ', localStorage.getItem('token'));
 //   try {
 //     const res = await axios.post(
 //       `${url}`,
 //       {
-//         title: 'string',
-//         content: 'string',
-//         imageUrl: 'string',
-//         projectPeriod: 1,
-//         location: 'SEOUL',
-//         startDate: '2024-11-04',
-//         recruitEndDate: '2024-11-04',
-//         boardTechStackList: [
-//           {
-//             techStackName: 'JAVA'
-//           }
-//         ],
-//         boardPositionList: [
-//           {
-//             positionName: 'BackEnd',
-//             requiredCount: 5,
-//             currentCount: 0
-//           }
-//         ]
+//         title: formData.title,
+//         content: formData.content,
+//         imageUrl: formData.imageUrl, // 사용자가 입력한 이미지 URL
+//         projectPeriod: formData.projectPeriod,
+//         location: formData.location,
+//         startDate: formData.startDate,
+//         recruitEndDate: formData.recruitEndDate,
+//         boardTechStackList: formData.boardTechStackList, // 사용자가 선택한 기술 스택 리스트
+//         boardPositionList: formData.boardPositionList // 사용자가 입력한 포지션 리스트
 //       },
 //       {
 //         headers: {
@@ -39,7 +30,7 @@
 //     console.log(res.data);
 //     return res;
 //   } catch (e) {
-//     console.log(e);
+//     console.log('에러 발생:', e.response ? e.response.data : e.message);
 //     return e;
 //   }
 // };
@@ -79,7 +70,7 @@
 
 // export const getTechstacks = async () => {
 //   try {
-//     const res = await axios.get(`${url}/techstacks`);
+//     const res = await axios.get(`${url}/tech-stacks`);
 //     // console.log('getTechstacks axios호출: ', res);
 //     return res.data.result;
 //   } catch (e) {
@@ -102,7 +93,7 @@
 // export const getLocation = async () => {
 //   try {
 //     const res = await axios.get(`${url}/locations`);
-//     console.log('getLocations axios호출: ', res);
+//     // console.log('getLocations axios호출: ', res);
 //     return res;
 //   } catch (e) {
 //     console.log(e);

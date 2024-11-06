@@ -1,9 +1,21 @@
 import axios from 'axios';
-// import { GLOBAL_URL } from './util';
 
 // const url = 'http://192.168.0.61:8080/api/v1/boards';
 const url = 'http://localhost:8080/api/v1/boards';
-// const url = `${GLOBAL_URL}/api/v1/boards`;
+
+export const loadProject = async (boardNumber) => {
+  try {
+    const res = await axios.get(`${url}/${boardNumber}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return res.data; // 필요한 데이터 반환
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
 
 export const saveProject = async (data) => {
   // console.log('저장axios 호출');
@@ -15,7 +27,7 @@ export const saveProject = async (data) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
-    console.log(res.data);
+    console.log(res);
     return res;
   } catch (e) {
     console.log('저장 Api 에러 발생:', e.response ? e.response.data : e.message);
@@ -49,7 +61,7 @@ export const listProject = async (pageNumber = 1, pageSize = 16) => {
 
   try {
     const res = await axios.get(`${url}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-    // console.log('저장 axios 호출', res);
+    console.log(res);
     return res.data;
   } catch (e) {
     console.log(e);
@@ -84,6 +96,22 @@ export const getLocation = async () => {
     const res = await axios.get(`${url}/locations`);
     // console.log('getLocations axios호출: ', res);
     return res;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
+
+// 댓글 로드
+export const loadComments = async (boardNumber) => {
+  try {
+    const res = await axios.get(`${url}/${boardNumber}/comments`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return res.data;
   } catch (e) {
     console.log(e);
     return e;

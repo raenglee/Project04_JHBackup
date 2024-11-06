@@ -174,8 +174,8 @@ const updateLocations = async () => {
   try {
     const res = await getLocation();
     // console.log('updateLocations : ', res.data);
-    if (Array.isArray(res.data.result)) {
-      locationOptions.value = res.data.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
+    if (Array.isArray(res.data)) {
+      locationOptions.value = res.data; // 목록이 이름 하나이므로 배열에 넣을 필요X
     } else {
       console.error('지역 / 구분 배열 저장 에러', res);
     }
@@ -196,8 +196,8 @@ const updateTechstacks = async () => {
     const res = await getTechstacks();
     // console.log('updateTechstacks : ', res);
     techOptions.value = res.result; // 받아온 기술 목록을 techOptions에 저장
-    if (Array.isArray(res.data.result.result)) {
-      techOptions.value = res.data.result.result.map((item) => ({
+    if (Array.isArray(res.data.result)) {
+      techOptions.value = res.data.result.map((item) => ({
         // 받아오는 정보가 두개이상이므로 map으로 가져온다.
         techStackName: item.techStackName,
         imageUrl: item.imageUrl
@@ -259,8 +259,8 @@ const updatePositions = async () => {
   try {
     const res = await getPositions();
     // console.log('updatePsotions : ', res.data.result);
-    if (Array.isArray(res.data.result.result)) {
-      roleOptions.value = res.data.result.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
+    if (Array.isArray(res.data.result)) {
+      roleOptions.value = res.data.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
     } else {
       console.error('분야별 모집 인원 배열 저장 에러', res);
     }
