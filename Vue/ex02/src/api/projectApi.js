@@ -1,16 +1,17 @@
 import axios from 'axios';
+// import { GLOBAL_URL } from './util';
 
 // const url = 'http://192.168.0.61:8080/api/v1/boards';
 const url = 'http://localhost:8080/api/v1/boards';
+// const url = `${GLOBAL_URL}/api/v1/boards`;
 
-export const loadProject = async (boardNumber) => {
+export const getProjectView = async (board_id) => {
+  console.log(`${url}/${board_id}`);
   try {
-    const res = await axios.get(`${url}/${boardNumber}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    return res.data; // 필요한 데이터 반환
+    const res = await axios.get(`${url}/${board_id}`, 
+  );
+    
+    return res;
   } catch (e) {
     console.log(e);
     return e;
@@ -61,8 +62,8 @@ export const listProject = async (pageNumber = 1, pageSize = 16) => {
 
   try {
     const res = await axios.get(`${url}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
-    // console.log('리스트 가져오기 axios 연결: ',res);
-    return res.data;
+    // console.log('리스트 가져오기 axios 연결: ', res);
+    return res.data.result;
   } catch (e) {
     console.log(e);
     return e;
@@ -102,15 +103,10 @@ export const getLocation = async () => {
   }
 };
 
-
 // 댓글 로드
-export const loadComments = async (boardNumber) => {
+export const getCommentsView = async (board_id) => {
   try {
-    const res = await axios.get(`${url}/${boardNumber}/comments`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    });
+    const res = await axios.get(`${url}/${board_id}/comments`);
     return res.data;
   } catch (e) {
     console.log(e);

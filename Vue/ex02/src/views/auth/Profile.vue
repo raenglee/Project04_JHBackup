@@ -33,7 +33,7 @@
             <input type="text" v-model="formData.affiliation" placeholder="그린대학교" class="col-span-2 border p-2 rounded-full w-full" />
           </div>
 
-          <!-- 거주 지역 -->
+          <!-- 거주 지역 -> 온라인이 포함 될 수 없기 떄문에 데이터를 가져올 수 없다-->
           <div class="grid grid-cols-4 items-center gap-x-4">
             <label class="text-gray-700 text-lg font-semibold">거주 지역</label>
             <select v-model="formData.location" class="col-span-2 border p-2 rounded-full w-full">
@@ -50,7 +50,7 @@
               <div v-for="(position, index) in positions" :key="index" class="flex items-center w-300 mb-3">
                 <select v-model="position.role" class="p-2 border-2 border-gray-200 rounded-full" style="width: 410px">
                   <option disabled value="">분야를 선택하세요</option>
-                  <option v-for="role in roleOptions" :key="role">{{ role }}</option>
+                  <option v-for="role in roleOptions" :key="role">{{ role.positionName }}</option>
                 </select>
                 <!-- 삭제 버튼: 첫 번째 항목에서는 비활성화 -->
                 <div class="flex">
@@ -80,18 +80,21 @@
           <!-- 기술/언어 선택 -->
           <div class="grid grid-cols-4 gap-x-4 items-center">
             <label class="text-gray-700 text-lg font-semibold">기술 / 언어</label>
-            <div class="col-span-2 relative"> <!-- 'relative' 클래스를 추가 -->
+            <div class="col-span-2 relative">
+              <!-- 'relative' 클래스를 추가 -->
               <div @click="toggleDropdown" class="w-full h-11 p-2 border rounded-full cursor-pointer flex items-center justify-between">
                 <span>{{ selectedSkill.value || '기술을 선택하세요' }}</span>
               </div>
               <div v-if="isDropdownOpen" class="absolute bg-white border rounded-lg mt-2 w-full z-10">
                 <div v-for="tech in availableTechOptions" :key="tech" @click="selectSkill(tech)" class="p-2 hover:bg-gray-200 cursor-pointer">
-                  {{ tech }}
+                  <img :src="tech.imageUrl" class="tech-image w-10 h-10" />
+                  <p class="...">{{ tech.techStackName }}</p>
                 </div>
               </div>
               <div class="flex flex-wrap mt-2">
                 <div v-for="(skill, index) in selectedSkills" :key="index" @click="removeSkill(index)" class="border rounded-full p-2 mr-2 mb-2 flex items-center cursor-pointer">
-                  <span>{{ skill }}</span>
+                  <img :src="skill.imageUrl" class="w-8 h-8" />
+                  <span class="..."> {{ skill.techStackName }} </span>
                   <p class="text-red-500 ml-1 font-bold">x</p>
                 </div>
               </div>
@@ -114,20 +117,19 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useUserStore } from '@/store/user';
 import { userProfile, loginUsers, deleteUser } from '@/api/loginApi'; // registerUser 추가
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { getPositions, getTechstacks } from '@/api/projectApi';
 
 const useStore = useUserStore();
 const router = useRouter();
-const route = useRoute();
 
 const formData = ref({ nickname: '', affiliation: '', location: '' }); // formData 변수명 변경
-const positions = ref([{ role: '', count: 1 }]); // 포지션 관리
-const roleOptions = ['프론트엔드', '백엔드', '디자이너', 'PM', '기획자', '데브옵스', '안드로이드 개발자', 'IOS 개발자', '크로스 플랫폼 개발자'];
 
 const profileImage = ref(null); // 프로필 이미지 상태 관리
 const isUserDataExists = ref(false);
 const isSubmitted = ref(false); // 완료 버튼 클릭 여부를 추적
 
+//사용자 데이터 가져오기
 const checkUserData = async () => {
   try {
     const userData = await loginUsers(); // 사용자 데이터 가져오기
@@ -186,7 +188,6 @@ const selectFile = () => {
   document.querySelector('input[type="file"]').click(); // 파일 입력 클릭
 };
 
-
 // const checkNickname = async () => {
 //   try {
 //     const response = await checkNickname(formData.value.nickname); // 닉네임 중복 확인 API 호출
@@ -201,12 +202,14 @@ const selectFile = () => {
 //   }
 // };
 
+// 회원가입 취소
 const handleCancel = async () => {
   alert('회원가입 취소.');
   await removeUserData();
   router.push('/');
 };
 
+// 사용자 데이터 삭제
 const removeUserData = async () => {
   try {
     await deleteUser(); // 사용자 정보 삭제 요청
@@ -218,11 +221,6 @@ const removeUserData = async () => {
   }
 };
 
-// 페이지가 마운트될 때 사용자 데이터 확인
-onMounted(() => {
-  checkUserData();
-});
-
 // 컴포넌트가 언마운트될 때 사용자 정보 삭제
 onBeforeUnmount(() => {
   if (!isSubmitted.value) {
@@ -230,30 +228,33 @@ onBeforeUnmount(() => {
   }
 });
 
-//🚹 분야별 모집 인원 관련 scripts
-const addPosition = () => {
-  positions.value.push({ role: '', count: 1 });
-};
-
-const removePosition = (index) => {
-  positions.value.splice(index, 1);
-};
-
+// 기술 / 언어 데이터 연결
 const selectedSkill = ref(''); // 현재 선택된 기술 저장
 const selectedSkills = ref([]); // 선택된 기술들의 배열
-const techOptions = ['JAVA', 'Python', 'JavaScript', 'Spring', 'React', 'Node.js', 'Vue', 'Angular', 'Django', 'Kotlin']; // 모든 기술목록 저장 배열
+const techOptions = ref([]); // 서버에서 전달 받은 기술 저장
 
-const isDropdownOpen = ref(false); // 드롭다운 열림 상태
+const updateTechstacks = async () => {
+  try {
+    const res = await getTechstacks();
+    // console.log('updateTechstacks 데이터 확인: ', res);
+    // techOptions.value = res.result; // 받아온 기술 목록을 techOptions에 저장
+    if (Array.isArray(res.data.result)) {
+      techOptions.value = res.data.result.map((item) => ({
+        techStackName: item.techStackName,
+        imageUrl: item.imageUrl
+      }));
+    } else {
+      console.error('기술/언어 배열 저장 에러', res);
+    }
+  } catch (error) {
+    console.error('실패:', error);
+  }
+};
 
 // 선택된 기술을 제외한 선택 가능한 기술목록
 const availableTechOptions = computed(() => {
-  return techOptions.filter((tech) => !selectedSkills.value.includes(tech));
+  return techOptions.value.filter((tech) => !selectedSkills.value.includes(tech));
 });
-
-// 드롭다운 열고 닫기
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
 
 // 기술 선택
 const selectSkill = (tech) => {
@@ -277,6 +278,40 @@ const removeSkill = (index) => {
   }
 };
 
+//🚹 분야별 모집 인원 관련 scripts
+const positions = ref([{ role: '', count: 1 }]); // 포지션 관리
+const roleOptions = ref([]); // 서버에서 전달 받은 포지션 저장
+
+const addPosition = () => {
+  positions.value.push({ role: '', count: 1 });
+};
+
+const removePosition = (index) => {
+  positions.value.splice(index, 1);
+};
+
+// 포지션 서버 연결
+const updatePositions = async () => {
+  try {
+    const res = await getPositions();
+    // console.log('updatePsotions 데이터 확인: ', res);
+    if (Array.isArray(res.data.result)) {
+      roleOptions.value = res.data.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
+    } else {
+      console.error('분야별 모집 인원 배열 저장 에러', res);
+    }
+  } catch (error) {
+    console.error('실패:', error);
+  }
+};
+
+const isDropdownOpen = ref(false); // 드롭다운 열림 상태
+
+// 드롭다운 열고 닫기
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+
 // 바탕 클릭 이벤트 처리
 const handleClickOutside = (event) => {
   if (!event.target.closest('.relative') && isDropdownOpen.value) {
@@ -285,8 +320,10 @@ const handleClickOutside = (event) => {
   }
 };
 
-// 이벤트 리스너 등록
 onMounted(() => {
+  checkUserData();
+  updateTechstacks();
+  updatePositions();
   document.addEventListener('mousedown', handleClickOutside);
 });
 

@@ -3,18 +3,19 @@
     <h1 class="pt-10 font-bold text-xl">프로젝트 생성</h1>
     <div class="my-3 mb-10">
       <hr class="border-t-4 border-[#d10000]" />
+      <p class="text-sm my-2"><span class="text-[#d10000] mx-1">*</span>프로젝트는 빈 항목이 없이 작성되어야 합니다.</p>
     </div>
 
     <!--📝프로젝트 생성 선택 구간-->
     <div class="flex flex-col">
-      <h1 class="font-bold text-lg mb-2">프로젝트 명</h1>
+      <h1 class="font-bold text-lg mb-2">프로젝트 명<span class="text-[#d10000] mx-1">*</span></h1>
       <input type="text" v-model="title" class="min-w-full h-10 border border-gray-200 justify-center items-center rounded-full p-3 focus:outline-none" placeholder="프로젝트 명을 입력하세요." />
 
       <!--지역/구분, 진행 기간, 모집 마감일-->
       <div class="flex justify-between gap-5 mt-5 flex-wrap">
         <!--🌍지역 / 구분 드롭다운-->
         <div class="flex flex-col">
-          <h1 class="font-bold text-lg pb-2">지역 / 구분</h1>
+          <h1 class="font-bold text-lg pb-2">지역 / 구분<span class="text-[#d10000] mx-1">*</span></h1>
           <select v-model="location" class="w-52 h-10 p-2 border border-gray-200 rounded-full cursor-pointer focus:outline-none">
             <option disabled value="">지역 / 구분을 선택하세요</option>
             <option v-for="location in locationOptions" :key="location" :value="location">
@@ -23,9 +24,11 @@
           </select>
         </div>
 
+        
+
         <!--진행 기간 드롭다운-->
         <div class="flex flex-col">
-          <h1 class="font-bold text-lg pb-2">진행 기간</h1>
+          <h1 class="font-bold text-lg pb-2">진행 기간<span class="text-[#d10000] mx-1">*</span></h1>
           <select v-model="project_period" class="w-52 h-10 p-2 border border-gray-200 rounded-full focus:outline-none">
             <option value="" disabled>{{ project_period ? project_period : '진행 기간을 선택하세요' }}</option>
             <option>미정</option>
@@ -41,14 +44,20 @@
 
         <!-- 모집 마감일 -->
         <div class="flex flex-col">
-          <h1 class="font-bold text-lg pb-2">모집 마감일</h1>
+          <h1 class="font-bold text-lg pb-2">모집 마감일<span class="text-[#d10000] mx-1">*</span></h1>
           <input v-model="recruit_end_date" type="date" class="w-52 h-10 p-2 border border-gray-200 rounded-full focus:outline-none" :min="minDate" />
         </div>
+      
+      
       </div>
+
+
+
+      
 
       <!--✅기술/언어 선택 -> 다중선택, 선택삭제 가능하도록-->
       <div class="flex flex-col justify-between mt-5" ref="dropdownContainer">
-        <h1 class="font-bold text-lg pb-2">기술 / 언어 (최대 10개)</h1>
+        <h1 class="font-bold text-lg pb-2">기술 / 언어<span class="text-sm mx-1">(최대 10개)</span><span class="text-[#d10000] mx-1">*</span></h1>
 
         <div class="relative w-full m-auto flex">
           <div @click="toggleDropdown" class="min-w-72 h-10 p-2 border border-gray-200 rounded-full cursor-pointer flex items-center justify-between">
@@ -77,7 +86,7 @@
 
       <!--🚹분야별 모집 인원 -> 추가, 삭제 가능하도록-->
       <div class="flex justify-between mt-5">
-        <h1 class="font-bold text-lg pb-2">분야별 모집 인원</h1>
+        <h1 class="font-bold text-lg pb-2">분야별 모집 인원<span class="text-[#d10000] mx-1">*</span></h1>
       </div>
       <div>
         <div v-for="(position, index) in positions" :key="index" class="flex items-center space-x-7 mb-3">
@@ -129,12 +138,12 @@
 
       <!--프로젝트 상세 소개-->
       <div>
-        <h1 class="font-bold text-lg mb-3">프로젝트 소개</h1>
+        <h1 class="font-bold text-lg mb-3">프로젝트 소개<span class="text-[#d10000] mx-1">*</span></h1>
         <textarea v-model="content" class="w-full p-3 mb-2 h-96 border border-gray-200 rounded-md focus:outline-none ring-gray-300 resize-none text-gray-700 placeholder-gray-400 bg-white"></textarea>
       </div>
 
       <!-- 파일 첨부 -->
-      <div @dragover.prevent="" @drop.prevent="dropFile" class="p-10 bg-gray-100 rounded-md">
+      <!-- <div @dragover.prevent="" @drop.prevent="dropFile" class="p-10 bg-gray-100 rounded-md">
         <h1 class="text-center text-gray-500 cursor-pointer" v-if="myfile.length === 0">
           <FontAwesomeIcon icon="fa-solid fa-image" size="2xl" />
           파일을 첨부하세요
@@ -146,7 +155,7 @@
             <img v-if="isImageFile(file)" :src="getFileUrl(file)" class="mt-2 m-auto h-auto" />
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- 취소, 등록 버튼 -->
       <div class="flex justify-center space-x-4 pt-4 mt-5 mb-5">
@@ -173,9 +182,9 @@ const locationOptions = ref([]); // 서버에서 전달 받은 지역 저장
 const updateLocations = async () => {
   try {
     const res = await getLocation();
-    // console.log('updateLocations : ', res.data);
-    if (Array.isArray(res.data)) {
-      locationOptions.value = res.data; // 목록이 이름 하나이므로 배열에 넣을 필요X
+    // console.log('updateLocations 데이터 확인: ', res.data);
+    if (Array.isArray(res.data.result)) {
+      locationOptions.value = res.data.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
     } else {
       console.error('지역 / 구분 배열 저장 에러', res);
     }
@@ -194,7 +203,7 @@ const techOptions = ref([]); // 서버에서 전달 받은 기술 저장
 const updateTechstacks = async () => {
   try {
     const res = await getTechstacks();
-    // console.log('updateTechstacks : ', res);
+    // console.log('updateTechstacks 데이터 확인: ', res);
     techOptions.value = res.result; // 받아온 기술 목록을 techOptions에 저장
     if (Array.isArray(res.data.result)) {
       techOptions.value = res.data.result.map((item) => ({
@@ -258,7 +267,7 @@ const roleOptions = ref([]); // 서버에서 전달 받은 포지션 저장
 const updatePositions = async () => {
   try {
     const res = await getPositions();
-    // console.log('updatePsotions : ', res.data.result);
+    // console.log('updatePsotions 데이터 확인: ', res.data.result);
     if (Array.isArray(res.data.result)) {
       roleOptions.value = res.data.result; // 목록이 이름 하나이므로 배열에 넣을 필요X
     } else {
@@ -314,10 +323,15 @@ const decreaseCount = (index) => {
 // };
 
 // 게시글 등록 취소
-
 const cancel = () => {
-  console.log('취소버튼 눌리는지 확인');
-  router.push({ name: 'projectlist' });
+  const isConfirmed = window.confirm('현재 작성 중인 내용은 저장되지 않습니다. 정말로 취소하시겠습니까?');
+  if (isConfirmed) {
+    // console.log('게시글 작성 취소버튼 눌리는지 확인');
+    router.push({ name: 'projectlist' });
+  } else {
+    // 취소한 경우 아무런 동작도 하지 않으므로 아무것도 적지 않기
+    // console.log('게시글 작성 취소를 취소');
+  }
 };
 
 // 게시글 등록
@@ -328,6 +342,7 @@ const project_period = ref('');
 const recruit_end_date = ref('');
 
 const save = async () => {
+
   const data = {
     title: title.value,
     content: content.value,

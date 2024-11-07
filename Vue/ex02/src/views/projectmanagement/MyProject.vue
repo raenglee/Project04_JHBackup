@@ -1,4 +1,7 @@
 <template>
+  <div class="my-3">
+    <hr class="border-t-4 border-[#d10000]" />
+  </div>
   <div class="pt-7 px-2">
     <div class="flex flex-col gap-2">
       <p class="text-sm">YYYY-MM-DD</p>
@@ -14,6 +17,16 @@
         </div>
       </div>
       <hr class="border-t border-gray-300 mt-2" />
+    </div>
+
+    <div class="relative group">
+      <!-- 이미지 -->
+      <img src="https://via.placeholder.com/300" alt="Sample Image" class="w-full h-auto" />
+
+      <!-- 텍스트, hover 시에만 보이도록 설정 -->
+      <div class="absolute inset-0 flex justify-center items-center opacity-0 group-hover:opacity-100 text-white bg-black bg-opacity-50 transition-opacity duration-300">
+        <p class="text-xl font-bold">마우스를 올려보세요!</p>
+      </div>
     </div>
   </div>
 </template>

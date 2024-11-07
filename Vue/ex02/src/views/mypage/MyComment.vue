@@ -1,4 +1,7 @@
 <template>
+      <div class="my-3">
+      <hr class="border-t-4 border-[#d10000]" />
+    </div>
   <div class="pt-7 px-2">
     <div class="flex flex-col gap-2">
 

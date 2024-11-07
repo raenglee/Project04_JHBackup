@@ -10,14 +10,30 @@
         <!--🌐로그인 한 후 아이콘-->
         <template v-if="useStore.loginCheck">
           <div class="flex space-x-4">
-            <RouterLink to="/projectview/:board_id">게시글상세 테스트용</RouterLink>
             <button><img src="/img/bell.png" class="h-6 w-6" /></button>
             <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
-            <RouterLink to="/mypage/myposts" class="focus:outline-none">
-              <img src="/img/person.png" class="h-6 w-5" />
-            </RouterLink>
-            <button @click="logout" class="text-white">로그아웃</button>
-            <p class="text-white">{{ useStore.nickname }} 님</p>
+            <div class="relative">
+              <!-- 프로필 이미지 클릭 하면 -->
+              <img src="/img/person.png" class="h-6 w-5 cursor-pointer" @click="toggleDropdown" />
+
+              <!-- 드롭다운 메뉴 -->
+              <div v-if="isDropdownOpen" class="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow z-10">
+                <ul class="text-sm">
+                  <li>
+                    <p class="px-4 py-2 font-bold">{{ useStore.profileImage }} {{ useStore.nickname }} 님</p>
+                  </li>
+                  <li>
+                    <RouterLink to="/mypage/myprofile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100"> 마이 페이지 </RouterLink>
+                  </li>
+                  <li>
+                    <RouterLink to="/projectmanagement/myproject" class="block px-4 py-2 text-gray-700 hover:bg-gray-100"> 프로젝트 관리 </RouterLink>
+                  </li>
+                  <li>
+                    <button @click="logout" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left">로그아웃</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </template>
 
@@ -63,11 +79,11 @@
 
 <!--스크립트-->
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { RouterLink } from 'vue-router';
-import { loginUsers, userProfile  } from '@/api/loginApi';
+import { loginUsers } from '@/api/loginApi';
 
 //모달
 const isModal = ref(false);
@@ -109,7 +125,6 @@ watchEffect(async () => {
     localStorage.setItem('token', route.query.token);
 
     try {
-      
       const data = await loginUsers();
       // 닉네임이 없을 경우 /profile로 이동
       if (!data.result.nickname) {
@@ -124,16 +139,36 @@ watchEffect(async () => {
   }
 });
 
+// 드롭다운 상태 관리
+const isDropdownOpen = ref(false);
 
+// 드롭다운 토글 함수 (이미지 클릭 시)
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
 
-
-// 로그아웃
+// 로그아웃 함수
 const logout = () => {
   localStorage.removeItem('token');
   useStore.logout();
   alert('로그아웃 성공');
   router.push('/');
 };
+
+// 외부 클릭 시 드롭다운 닫기
+const handleClickOutside = (event) => {
+  if (!event.target.closest('.relative')) {
+    isDropdownOpen.value = ''; // 모든 드롭다운 닫기
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <!--스타일-->
