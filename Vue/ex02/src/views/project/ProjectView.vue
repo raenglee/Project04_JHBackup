@@ -72,7 +72,7 @@
         </div>
         <div class="flex justify-between mb-3 mx-7">
           <RouterLink to="/"><button class="border border-gray-200 rounded-full px-4 py-1 text-sm hover:bg-gray-200" @click="goToList">목록</button></RouterLink>
-          <div class="space-x-3">
+          <div v-if="isAuthor" class="space-x-3">
             <button class="border border-gray-200 rounded-full px-4 py-1 text-sm hover:bg-[#d10000] hover:text-white hover:border-[#d10000]">수정</button>
             <button class="border border-gray-200 rounded-full px-4 py-1 text-sm hover:bg-[#d10000] hover:text-white hover:border-[#d10000]">삭제</button>
           </div>
@@ -116,7 +116,7 @@
 
 <script setup>
 import { getProjectView } from '@/api/projectApi';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -151,9 +151,9 @@ watchEffect(async () => {
   }
 });
 
-// const goToList = () => {
-//   this.router.push('/');
-// }
+
+// const isAuthor = computed( () = > )
+
 </script>
 
 <style lang="scss" scoped></style>
