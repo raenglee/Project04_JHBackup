@@ -6,7 +6,6 @@ import ProjectView from '@/views/project/ProjectView.vue';
 import Profile from '@/views/auth/Profile.vue';
 
 import MyPage from '@/views/mypage/MyPage.vue';
-import MyProfile from '@/views/mypage/MyProfile.vue';
 import MyProfileEdit from '@/views/mypage/MyProfileEdit.vue';
 import MyComment from '@/views/mypage/MyComment.vue';
 import MyLikePost from '@/views/mypage/MyLikePost.vue';
@@ -29,11 +28,6 @@ const router = createRouter({
       component: MyPage,
       children: [
         {
-          path: 'myprofile',
-          name: 'myprofile',
-          component: MyProfile
-        },
-        {
           path: 'mycomments',
           name: 'mycomments',
           component: MyComment
@@ -44,16 +38,16 @@ const router = createRouter({
           component: MyLikePost
         },
         {
-          path: 'myprofileedit',
-          name: 'myprofileedit',
-          component: MyProfileEdit
-        },
-        {
           path: '', // 기본 경로: /mypage
           name: 'default', // 이름 추가
-          redirect: 'myprofile' // 기본페이지 myprofile로 리디렉션
+          redirect: 'mycomments' // 기본페이지 myprofile로 리디렉션
         }
       ]
+    },
+    {
+      path: '/myprofileedit',
+      name: 'myprofileedit',
+      component: MyProfileEdit
     },
     {
       path: '/projectcreate',

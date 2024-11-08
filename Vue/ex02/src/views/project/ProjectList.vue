@@ -2,7 +2,7 @@
   <div class="bg-white">
     <!--🟥메인 박스-->
     <section class="container mx-auto py-8 w-4/6">
-      <h1 class="text-4xl font-bold text-center mb-6 animate-slideUp py-10">현재 모집 중인 프로젝트를 확인해보세요!</h1>
+      <h1 class="text-4xl font-bold text-center mb-6 animate-slideUp py-10 text-gray-800">현재 모집 중인 프로젝트를 확인해보세요!</h1>
 
       <!--🔍서치 박스-->
       <div class="flex items-center justify-between mb-3">
@@ -16,7 +16,7 @@
                 class="min-w-36 max-w-36 max-h-10 px-4 py-1 mt-5 mb-1 border border-gray rounded-full cursor-pointer outline-none flex items-center justify-between"
               >
                 <span class="truncate w-full" v-if="selectedLocation">{{ selectedLocation }}</span>
-                <span class="truncate w-full" v-else>지역 / 구분</span>
+                <span class="truncate w-full text-gray-800" v-else>지역 / 구분</span>
                 <!-- 화살표 아이콘: 박스 오른쪽에 고정 -->
                 <font-awesome-icon icon="chevron-down" class="text-gray-300 pl-2" />
               </div>
@@ -42,7 +42,7 @@
               class="min-w-36 max-w-36 max-h-10 px-4 py-1 mt-5 mb-1 border border-gray rounded-full cursor-pointer outline-none flex items-center justify-between"
             >
               <span class="truncate w-full" v-if="selectedPosition">{{ selectedPosition.positionName }}</span>
-              <span class="truncate w-full" v-else>포지션</span>
+              <span class="truncate w-full text-gray-800" v-else>포지션</span>
               <font-awesome-icon icon="chevron-down" class="text-gray-300 pl-2" />
             </div>
 
@@ -61,10 +61,10 @@
           <!-- 기술/언어 드롭다운 -->
           <div class="relative">
             <div @click="toggleDropdown('tech')" class="min-w-36 max-w-36 max-h-10 px-4 py-1 mt-5 mb-1 border border-gray rounded-full cursor-pointer outline-none">
-              <span>기술 / 언어</span>
+              <span class="text-gray-800">기술 / 언어</span>
               <font-awesome-icon icon="chevron-down" class="text-gray-300 pl-2" />
             </div>
-            <div v-if="activeDropdown === 'tech'" class="absolute bg-white border border-gray rounded-md z-10 p-4 shadow" style="width: 600px">
+            <div v-if="activeDropdown === 'tech'" class="absolute bg-white border border-gray rounded-md z-20 p-4 shadow" style="width: 600px">
               <!--드롭다운 내부-->
               <div class="flex gap-2">
                 <button type="button" class="bg-whith border border-gray-200 px-2 py-1 rounded-full text-sm hover:bg-gray-300">전체</button>
@@ -101,7 +101,7 @@
           </div>
 
           <button
-            class="min-w-36 max-h-8 px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none"
+            class="min-w-36 max-h-8 px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none text-gray-800"
             :class="{
               'bg-[#d10000] text-white': onlyBookmarked,
               'bg-white text-black': !onlyBookmarked
@@ -112,7 +112,7 @@
           </button>
 
           <button
-            class="min-w-36 max-h-8 px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none"
+            class="min-w-36 max-h-8 px-4 py-1 my-5 border border-[#d10000] rounded-full outline-none text-gray-800"
             :class="{
               'bg-[#d10000] text-white': onlyNeeded,
               'bg-white text-black': !onlyNeeded
@@ -132,20 +132,20 @@
 
       <!--📝프로젝트 글 박스-->
       <template v-if="arr && arr.length > 0">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-          <div v-for="item in arr" :key="item.id" class="border rounded-2xl p-4 relative" @click="viewPage(item.boardId)">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-10">
+          <div v-for="item in arr" :key="item.id" class=" cursor-pointer border rounded-2xl p-4 relative project-card " @click="viewPage(item.boardId)">
             <!-- {{ console.log(item) }} -->
             <div class="top-4 flex items-center justify-between">
-              <div class="border px-2 rounded-full mb-2 bg-gray-200">{{ item.location }}</div>
+              <div class="border px-2 rounded-full mb-2 bg-gray-200 text-gray-800">{{ item.location }}</div>
               <font-awesome-icon
                 :icon="item.isBookmarked ? ['fas', 'bookmark'] : ['far', 'bookmark']"
                 :class="[item.isBookmarked ? 'text-[#7371fc]' : 'text-gray-400', 'cursor-pointer']"
                 style="font-size: 22px"
-                @click="toggleBookmark(item)"
+                @click.stop="toggleBookmark(item)"
               />
             </div>
-            <div class="text-sm mb-2">모집 마감일 | {{ item.recruitEndDate }}</div>
-            <div class="text-xl font-bold mb-2">{{ item.title }}</div>
+            <div class="text-sm mb-2 text-gray-800">모집 마감일 | {{ item.recruitEndDate }}</div>
+            <div class="text-xl font-bold mb-2 text-gray-800">{{ item.title }}</div>
             <!--기술 아이콘-->
             <div class="flex pt-2 gap-3 mb-1">
               <div v-for="tech in item.techStacks" :key="tech">
@@ -153,25 +153,25 @@
               </div>
             </div>
             <div class="flex flex-col">
-              <p class="flex-grow text-right text-sm py-2" v-if="item.createdBy">{{ item.createdBy }}</p>
+              <p class="flex-grow text-right text-sm py-2 text-gray-800" v-if="item.createdBy">{{ item.createdBy }}</p>
               <p class="flex-grow text-right text-sm py-2" v-else>&nbsp;</p>
 
               <div class="flex justify-between items-center mt-3">
                 <!-- 인원 정보 (0 / 총 인원) -->
                 <div class="relative group">
                   <!-- 인원 0 / 총 인원 표시 -->
-                  <div class="text-sm cursor-pointer">인원 {{ item.currentCount }} / {{ item.totalRequiredCount }}</div>
+                  <div class="text-sm cursor-pointer text-gray-800">인원 {{ item.currentCount }} / {{ item.totalRequiredCount }}</div>
                   <!-- 개별 인원 수 출력, 마우스를 올리면 나타나도록 -->
                   <div
                     class="absolute z-10 bg-white left-14 bottom-2 p-2 shadow-lg rounded-xl mt-2 w-auto whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300"
                   >
                     <div v-for="count in item.positions" :key="count.positionName" class="text-sm my-1 m-auto">
-                      <span class="font-bold rounded-md px-1">{{ count.positionName }} -</span>{{ count.requiredCount }}명
+                      <span class="font-bold rounded-md px-1 text-gray-800">{{ count.positionName }} -</span>{{ count.requiredCount }}명
                     </div>
                   </div>
                 </div>
                 <!-- 조회수와 댓글 수 -->
-                <div class="flex text-sm items-center gap-1">
+                <div class="flex text-sm items-center gap-1 text-gray-800">
                   <font-awesome-icon icon="eye" class="text-gray-400 ml-1" />
                   {{ item.viewCount }}
                   <font-awesome-icon icon="comment" class="text-gray-400 ml-1" />
@@ -185,13 +185,13 @@
       <!--프로젝트 글 박스 끝-->
 
       <div class="text-center mt-10 mb-10">
-        <span class="font-semibold text-3xl"> 현재 DEVMIX에서 모집 중인 프로젝트 <span class="text-[#D10000]">N</span>건</span>
+        <span class="font-semibold text-3xl text-gray-800"> 현재 DEVMIX에서 모집 중인 프로젝트 <span class="text-[#D10000]">N</span>건</span>
       </div>
 
       <!--페이지 수-->
       <div class="flex justify-center mt-5">
         <ul class="flex space-x-2">
-          <li class="cursor-pointer p-3" v-for="(num, index) in totalPages" v-bind:key="index" @click="getProjects(num)">
+          <li class="cursor-pointer p-3 text-gray-800" v-for="(num, index) in totalPages" v-bind:key="index" @click="getProjects(num)">
             {{ num }}
           </li>
         </ul>
@@ -230,7 +230,7 @@ const getProjects = async (num = 1) => {
         totalRequiredCount // 총 인원 수
       };
     });
-    console.log('프로젝트 내용: ', arr.value); // arr.value로 확인
+    // console.log('프로젝트 내용: ', arr.value);
   } catch (error) {
     console.error('프로젝트 가져오기 오류:', error);
   }

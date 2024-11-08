@@ -1,8 +1,10 @@
 <template>
-    <div class="my-3">
+    <div class="w-4/6 mx-auto">
+    <h1 class="pt-10 font-bold text-2xl">내 정보 수정</h1>
+    <div class="my-3 mb-10">
       <hr class="border-t-4 border-[#d10000]" />
     </div>
-    <div class="flex justify-center items-center mx-auto" style="width: 900px">
+ 
           
       <div class="justify-center items-center">
         <div class="my-3" style="width: 900px">

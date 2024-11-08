@@ -9,27 +9,35 @@
 
         <!--🌐로그인 한 후 아이콘-->
         <template v-if="useStore.loginCheck">
-          <div class="flex space-x-4">
-            <button><img src="/img/bell.png" class="h-6 w-6" /></button>
-            <RouterLink to="/projectcreate"><img src="/img/pen.png" class="h-6 w-6" /></RouterLink>
-            <div class="relative">
-              <!-- 프로필 이미지 클릭 하면 -->
-              <img src="/img/person.png" class="h-6 w-5 cursor-pointer" @click="toggleDropdown" />
+          <div class="flex space-x-1">
+            <font-awesome-icon icon="bell" class="h-6 w-5 cursor-pointer p-2 text-white hover:bg-[#ffffff] hover:text-[#d10000]" />
+            <RouterLink to="/projectcreate">
+              <font-awesome-icon icon="pen" class="h-6 w-5 cursor-pointer p-2 text-white hover:bg-[#ffffff] hover:text-[#d10000]" />
+            </RouterLink>
+            <div class="relative" @mouseenter="openDropdown" @mouseleave="closeDropdown">
+              <font-awesome-icon
+                icon="user"
+                class="h-6 w-5 cursor-pointer p-2"
+                :class="{
+                  'text-[#d10000] bg-white': isPeopleDropdownOpen,
+                  'text-white hover:bg-[#ffffff] hover:text-[#d10000]': !isPeopleDropdownOpen
+                }"
+              />
 
               <!-- 드롭다운 메뉴 -->
-              <div v-if="isDropdownOpen" class="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow z-10">
+              <div v-if="isPeopleDropdownOpen" class="absolute right-0 top-10 w-max min-w-[150px] max-w-[300px] bg-white rounded-m z-10 shadow-[0_4px_3px_0_rgba(0,0,0,0.1)]">
                 <ul class="text-sm">
                   <li>
-                    <p class="px-4 py-2 font-bold">{{ useStore.profileImage }} {{ useStore.nickname }} 님</p>
+                    <p class="px-4 py-2 font-bold text-lg">반갑습니다 {{ useStore.nickname }} 님!</p>
                   </li>
                   <li>
-                    <RouterLink to="/mypage/myprofile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100"> 마이 페이지 </RouterLink>
+                    <RouterLink to="/mypage" class="block px-4 py-2 text-gray-800 hover:bg-[#d1000020]"> 마이 페이지 </RouterLink>
                   </li>
                   <li>
-                    <RouterLink to="/projectmanagement/myproject" class="block px-4 py-2 text-gray-700 hover:bg-gray-100"> 프로젝트 관리 </RouterLink>
+                    <RouterLink to="/projectmanagement/myproject" class="block px-4 py-2 text-gray-800 hover:bg-[#d1000020]"> 프로젝트 관리 </RouterLink>
                   </li>
                   <li>
-                    <button @click="logout" class="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left">로그아웃</button>
+                    <button @click="logout" class="block w-full px-4 py-2 text-gray-800 hover:bg-[#d1000020] text-left">로그아웃</button>
                   </li>
                 </ul>
               </div>
@@ -41,7 +49,9 @@
         <template v-else>
           <div class="flex space-x-5">
             <button class="focus:outline-none" @click.stop="modalLogin('login')">
-              <img src="/img/person.png" class="h-6 w-5" />
+              <!-- <img src="/img/person.png" class="h-6 w-5" /> -->
+              <!-- <font-awesome-icon icon="user" class="h-6 w-5 cursor-pointer text-white" /> -->
+              <font-awesome-icon icon="user" class="h-6 w-5 cursor-pointer p-2 text-white hover:bg-[#ffffff] hover:text-[#d10000]" />
             </button>
           </div>
         </template>
@@ -50,36 +60,34 @@
   </header>
 
   <!--🙎‍♂️로그인 모달-->
-  <div class="overlay" :class="{ isModal: isModal }"></div>
-  <div class="modal p-5 w-96 rounded-lg" :class="{ isView: isModal }">
-    <div class="flex items-center justify-between">
-      <h1 class="text-lg text-black font-bold">로그인</h1>
-      <button class="h-4 w-4" @click="modalLogin"><img src="/img/x.png" /></button>
-    </div>
-
-    <div class="m-5 justify-center">
-      <div class="flex flex-col gap-3">
-        <!-- <a href="http://192.168.0.61:8080/oauth2/authorization/google"><img src="/img/sns_G.png" /></a>
-        <a href="http://192.168.0.61:8080/oauth2/authorization/kakao"><img src="/img/sns_k.png" /></a>
-        <a href="http://192.168.0.61:8080/oauth2/authorization/naver"><img src="/img/sns_n.png" /></a> -->
-
-        <a href="http://localhost:8080/oauth2/authorization/google"><img src="/img/sns_G.png" /></a>
-        <a href="http://localhost:8080/oauth2/authorization/kakao"><img src="/img/sns_k.png" /></a>
-        <a href="http://localhost:8080/oauth2/authorization/naver"><img src="/img/sns_n.png" /></a>
+  <div class="overlay" :class="{ isModal: isModal }" @click="closeModal"></div>
+  <transition name="modal-fade">
+    <div v-if="isModal" class="modal p-5 w-96 rounded-lg" :class="{ isView: isModal }">
+      <div class="flex items-center justify-between">
+        <h1 class="text-lg text-black font-bold">로그인</h1>
+        <button class="h-4 w-4" @click="modalLogin"><img src="/img/x.png" /></button>
       </div>
-    </div>
 
-    <p class="text-center text-xs text-gray-400">
-      소셜 로그인 시 <br />
-      이용약관, 개인정보처리방침, 전자금융거래약관에 동의함으로 처리됩니다.
-    </p>
-  </div>
+      <div class="m-5 justify-center">
+        <div class="flex flex-col gap-3">
+          <a href="http://localhost:8080/oauth2/authorization/google"><img src="/img/sns_G.png" /></a>
+          <a href="http://localhost:8080/oauth2/authorization/kakao"><img src="/img/sns_k.png" /></a>
+          <a href="http://localhost:8080/oauth2/authorization/naver"><img src="/img/sns_n.png" /></a>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-gray-400">
+        소셜 로그인 시 <br />
+        이용약관, 개인정보처리방침, 전자금융거래약관에 동의함으로 처리됩니다.
+      </p>
+    </div>
+  </transition>
   <!--🙎‍♂️로그인 모달 끝-->
 </template>
 
 <!--스크립트-->
 <script setup>
-import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { RouterLink } from 'vue-router';
@@ -90,6 +98,11 @@ const isModal = ref(false);
 
 const modalLogin = async () => {
   isModal.value = !isModal.value;
+};
+
+// 모달 닫기 (배경 클릭 시)
+const closeModal = () => {
+  isModal.value = false;
 };
 
 //로그인
@@ -140,11 +153,16 @@ watchEffect(async () => {
 });
 
 // 드롭다운 상태 관리
-const isDropdownOpen = ref(false);
+const isPeopleDropdownOpen = ref(false);
 
-// 드롭다운 토글 함수 (이미지 클릭 시)
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
+// 드롭다운 열기
+const openDropdown = () => {
+  isPeopleDropdownOpen.value = true;
+};
+
+// 드롭다운 닫기
+const closeDropdown = () => {
+  isPeopleDropdownOpen.value = false;
 };
 
 // 로그아웃 함수
@@ -155,10 +173,9 @@ const logout = () => {
   router.push('/');
 };
 
-// 외부 클릭 시 드롭다운 닫기
 const handleClickOutside = (event) => {
   if (!event.target.closest('.relative')) {
-    isDropdownOpen.value = ''; // 모든 드롭다운 닫기
+    isPeopleDropdownOpen.value = false;
   }
 };
 
